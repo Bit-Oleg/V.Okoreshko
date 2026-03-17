@@ -1,0 +1,889 @@
+/* ================================================
+   RESET — скидання стандартних стилів браузера
+================================================ */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    height: auto;
+    vertical-align: middle;
+}
+
+/* Виправлено: додано пробіли між селекторами для читабельності */
+li,
+ol,
+ul {
+    list-style: none;
+}
+
+/* ================================================
+   BASE — базові стилі сторінки
+================================================ */
+body {
+    font-family: 'Plus Jakarta Sans', 'Raleway', sans-serif;
+    /* Виправлено: прибрано подвійну крапку з комою ;; */
+    background: #E9F5FF;
+}
+
+/* ================================================
+   БУРГЕР-ТРИГЕР — фіксована кнопка відкриття меню
+================================================ */
+.page-menu-trigger {
+    position: fixed;
+    top: 100px;
+    right: 200px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 16px;
+    gap: 10px;
+    background: rgba(203, 219, 232, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.page-menu-trigger:hover {
+    background: rgba(164, 177, 187, 0.5);
+}
+
+.page-menu-trigger p {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 125%;
+    color: #1a1a1a;
+}
+
+/* Кнопка бургер (три риски) */
+.burger-open-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 21px;
+    height: 15px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* Одна риска бургера */
+.burger-line {
+    width: 100%;
+    height: 2px;
+    background-color: #1a1a1a;
+    border-radius: 2px;
+    transition: background-color 0.25s;
+}
+
+/* ================================================
+   OVERLAY — затемнення фону при відкритому меню
+   Елемент доданий у HTML (був тільки в CSS)
+================================================ */
+.burger-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 900;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+
+.burger-overlay.is-visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ================================================
+   БУРГЕР-МЕНЮ — навігаційна панель
+================================================ */
+.burger-menu-wrapper {
+    position: fixed;
+    top: 106px;
+    right: -320px;
+    width: 297px;
+    height: 545px;
+    background: linear-gradient(
+        166.36deg,
+        rgba(217, 235, 255, 0.9) 1.73%,
+        rgba(232, 241, 248, 0.9) 104.94%
+    );
+    backdrop-filter: blur(5px);
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    padding: 48px 32px 40px;
+    transition: right 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+/* Відкритий стан: меню виїжджає в позицію right: 20px */
+.burger-menu-wrapper.is-open {
+    top: 152px;
+    right: 200px;
+}
+
+/* Кнопка × закриття */
+.burger-close-btn {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    font-size: 34px;
+    line-height: 1;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.25s;
+}
+
+.burger-close-btn:hover {
+    color: rgba(214, 137, 163, 1);
+}
+
+/* SVG-лого у меню */
+.burger-logo {
+    width: 70px;
+    height: auto;
+    writing-mode: vertical-rl;
+    transform: rotate(90deg);
+    margin-left: 195px;
+    margin-bottom: 30px;
+    fill: #420216;
+}
+
+/* ================================================
+   МЕНЮ — навігаційний список
+================================================ */
+.menu-nav {
+    flex: 1;
+}
+
+.menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 27px;
+    border-radius: 30px;
+}
+
+.menu-item a {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 125%;
+    color: #150F25;
+    display: inline-block;
+    transition: color 0.25s, padding-left 0.25s;
+}
+
+.menu-item a:hover {
+    color: rgba(214, 137, 163, 1);
+}
+
+/* Контакти внизу меню */
+.menu-contacts {
+    display: flex;
+    justify-content: flex-end;
+    gap: 32px;
+    border-top: 1px solid #e5e2dd;
+    padding-top: 28px;
+    margin-top: 40px;
+}
+
+.telegram-link,
+.email-link {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 125%;
+    color: #8FA6B9;
+    transition: color 0.25s;
+}
+
+.telegram-link:hover,
+.email-link:hover {
+    color: rgba(214, 137, 163, 1);
+}
+
+/* ================================================
+   SITE LOGO — лого у hero-секції
+================================================ */
+.site-logo {
+    width: 144px;
+    height: auto;
+    fill: rgba(66, 2, 22, 1);
+}
+
+/* ================================================
+   HERO — секція .page (ліва + права колонки)
+================================================ */
+.page {
+    display: flex;
+    width: min(1244px, 100%);
+    margin: 60px auto 0;
+    border-radius: 40px;
+    position: relative;
+    overflow: visible;
+    background-color: #F5FBFF;
+}
+
+/* ================================================
+   PAGE-LEFT — ліва колонка з контентом
+================================================ */
+.page-left {
+    display: flex;
+    flex-direction: column;
+    width: 911px;
+    border-radius: 40px;
+    background-image: url('./images/page_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-color: #F5FBFF;
+    padding: 40px;
+    position: relative;
+    z-index: 2;
+}
+.page-height {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.page-badge {
+    display: inline-block;
+    border: 1px solid #D689A3;
+    padding: 6px 16px;
+    border-radius: 50px;
+}
+
+.page-badge p {
+    font-family: 'Raleway', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 125%;
+    color: #D689A3;
+}
+
+.page-version {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 115%;
+    color: #8FA6B9;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.page-title h1 {
+    font-family: 'Raleway', sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 202px;
+    line-height: 135px;
+    letter-spacing: -0.07em;
+    color: #150F25;
+    text-transform: uppercase;
+}
+
+.page-subtitle {
+    font-family: 'Raleway', sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 96px;
+    line-height: 135px;
+    letter-spacing: -0.07em;
+    color: #150F25;
+}
+
+.page-title p {
+    font-family: 'Raleway', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 125%;
+    color: #150F25;
+}
+
+.page-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    gap: 10px;
+    background: #420216;
+    border-radius: 10px;
+    width: 256px;
+    margin-top: 92px;
+    margin-left: 585px;
+}
+
+.page-button a {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 125%;
+    text-decoration: underline;
+    color: #F8F5F2;
+}
+
+.page-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 29px;
+}
+.page-info_left {
+    display: flex;
+    align-items: center;
+    width: 180px;
+}
+.page-info_right {
+    display: flex;
+    align-items: center;
+    text-align: right;
+    width: 156px;
+}
+.page-info p {
+    font-family: 'Raleway', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 125%;
+    color: #150F25;
+}
+
+/* ================================================
+   PAGE-RIGHT
+================================================ */
+.page-right {
+    flex-grow: 1;
+    position: relative;
+    z-index: 1;
+    border-radius: 40px;
+}
+.page-right::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -275px;
+    width: 713px;
+    height: 100%;
+    background: url(./images/site-right.png) no-repeat center / cover;
+    border-radius: 40px;
+    z-index: -1;
+    pointer-events: none;
+}
+/* ================================================
+   ПОРТФОЛІО
+================================================ */
+.portfolio {
+    display: flex;
+    flex-direction: column;
+    width: min(1244px, 100%);
+    margin: 90px auto 0;
+    border-radius: 40px;
+    background: url(./images/portfolio.png);
+    background-size: cover;
+    background-position: center;
+    background-color: #F5FBFF;
+}
+.portfolio-title {
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+    margin-top: 62px;
+    margin-left: 622px;
+    margin-bottom: 42px;
+    width: 572px;
+}
+.portfolio-title h2 {
+    width: 572px;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 88px;
+    line-height: 95%;
+    text-align: right;
+    text-transform: uppercase;
+    color: #150F25;
+    margin-bottom: 16px;
+}
+
+.portfolio-title p {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 125%;
+    text-align: right;
+    text-transform: uppercase;
+    color: #150F25;
+}
+.portfolio-title span {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 125%;
+    text-align: right;
+    text-transform: uppercase;
+    color: #D689A3;
+}
+.portfolio-badge {
+    width: fit-content;
+    align-items: center;
+    padding: 6px 16px;
+    border: 1px solid #D689A3;
+    border-radius: 50px;
+    margin-top: 32px;
+    margin-left: 306px;
+}
+.portfolio-badge p {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 125%;
+    color: #D689A3;
+    text-transform: none;
+}
+.portfolio-landingpage {
+    display: flex;
+    padding: 0 44px;
+    gap: 12px;
+}
+
+.portfolio-landingpage_info {
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    background: #E9F5FF;
+    border-radius: 20px;
+}
+.portfolio-page_badge {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+}
+.portfolio-page_span {
+    display: flex;
+    align-items: center;
+    padding: 2px 8px;
+    background: #8FA6B9;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.portfolio-page_span span {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 115%;
+    text-transform: uppercase;
+    color: #F8F5F2;
+}
+
+
+.portfolio-page_badge p {
+    padding: 5px 8px;
+    border: 1px solid #150F25;
+    border-radius: 22px;
+    gap: 5px;
+    width: fit-content;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 120%;
+    color: #150F25;
+}
+
+.portfolio-landingpage_title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 26px;
+    margin-bottom: 259px;
+}
+
+
+.portfolio-landingpage_title h3 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 115%;
+    text-transform: uppercase;
+    color: #150F25;
+}
+
+.portfolio-landingpage_title p {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 125%;
+    font-variant: small-caps;
+    text-transform: none;
+    color: #150F25;
+}
+
+.portfolio-reviews {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 16px;
+    background: #F5FBFF;
+    border-radius: 20px;
+}
+.portfolio-reviews strong {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 140%;
+    text-transform: uppercase;
+    color: #506782;
+}
+
+.portfolio-reviews span {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 140%;
+    color: #150F25;
+}
+
+.portfolio-reviews p {
+    font-family: 'Raleway';
+    font-style: italic;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 125%;
+    color: #150F25;
+}
+
+
+.portfolio-reviews_video {
+    width: 100px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.portfolio-reviews_video iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.portfolio-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin-top: 24px;
+    margin-left: 305px;
+}
+.portfolio-button a {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 125%;
+    text-decoration-line: underline;
+    color: #150F25;
+}
+.portfolio-button img {
+    filter: brightness(0);
+}
+
+.portfolio-projects {
+    display: flex;
+    align-items: center;
+    padding: 36px 41px;
+    gap: 34px;
+}
+.portfolio-projects_left {
+    position: relative;
+    display: inline-block;
+}
+
+.portfolio-projects_left-text {
+    display: inline-block;
+    align-items: center;
+    padding: 8px 2px;
+    background: #8FA6B9;
+    border-radius: 20px 0px 4px 4px;
+    position: absolute;
+    top: 0%;
+    left: 0%; 
+    writing-mode: vertical-rl;
+    transform: rotate(360deg);
+}
+.portfolio-projects_left span {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 115%;
+    text-transform: uppercase;
+    color: #F8F5F2;
+}
+.portfolio-projects_button_left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 85%;
+    left: 33%;
+}
+
+.portfolio-projects_button_left a {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 125%;
+    text-decoration-line: underline;
+    color: #F5FBFF;
+}
+
+.portfolio-projects_center {
+    position: relative;
+    display: inline-block;
+}
+
+.portfolio-projects_center-text {
+    display: inline-block;
+    align-items: center;
+    padding: 8px 2px;
+    background: #8FA6B9;
+    border-radius: 20px 0px 4px 4px;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    writing-mode: vertical-rl;
+    transform: rotate(360deg);
+}
+
+.portfolio-projects_center span {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 115%;
+    text-transform: uppercase;
+    color: #F8F5F2;
+}
+
+.portfolio-projects_button_center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 85%;
+    left: 33%;
+}
+
+.portfolio-projects_button_center a {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 125%;
+    text-decoration-line: underline;
+    color: #F5FBFF;
+}
+
+
+.portfolio-projects_right {
+    position: relative;
+    display: inline-block;
+}
+
+.portfolio-projects_right-text {
+    display: inline-block;
+    align-items: center;
+    padding: 8px 2px;
+    background: #8FA6B9;
+    border-radius: 20px 0px 4px 4px;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    writing-mode: vertical-rl;
+    transform: rotate(360deg);
+}
+
+.portfolio-projects_right span {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 115%;
+    text-transform: uppercase;
+    color: #F8F5F2;
+}
+
+.portfolio-projects_button_right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 85%;
+    left: 33%;
+}
+
+.portfolio-projects_button_right a {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 125%;
+    text-decoration-line: underline;
+    color: #F5FBFF;
+}
+.vertical {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 115%;   
+    color: #8FA6B9;
+    writing-mode: vertical-rl;
+    transform: rotate(-90deg);
+    width: fit-content;
+}
+
+.portfolio-projects_button {
+    display: flex;
+    width: 357px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #420216;
+    border-radius: 10px;
+    margin-left: 837px;
+    margin-bottom: 66px;
+}
+
+.portfolio-projects_button a {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 125%;
+        color: #420216;
+}
+
+.sistem {
+    display: flex;
+    flex-direction: column;
+    width: min(1244px, 100%);
+    margin: 90px auto 0;
+    align-items: center;
+    
+}
+.sistem-title {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 672px;
+    margin-top: 106px;
+}
+.sistem-title h2 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 88px;
+    line-height: 95%;
+    text-align: center;
+    text-transform: uppercase;
+    color: #150F25;
+}
+
+.sistem-title span {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 125%;
+    text-align: center;
+    text-transform: uppercase;
+    color: #D689A3;
+}
+
+.sistem-title p {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 125%;
+    text-align: center;
+    text-transform: uppercase;
+    color: #150F25;
+}
+.sistem-blok {
+    display: flex;
+    flex-direction: row;
+    background: #420216;
+    border-radius: 40px;
+    width: min(1244px, 100%);
+    margin: 90px auto 0;
+}
+.sistem-blok_text {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    width: 263px;
+    padding: 6px 16px;
+    border: 1px solid #D689A3;
+    border-radius: 50px;
+}
+
+.sistem-blok_text p {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #D689A3;
+}
+.sistem-steps {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ background: #F5FBFF;
+ border-radius: 40px;
+}
+
+.sistem-steps__item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 20px;
+    gap: 190px;
+    background: #F5FBFF;
+    border-radius: 10px;
+}
