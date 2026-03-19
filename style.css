@@ -19,7 +19,6 @@ img {
     vertical-align: middle;
 }
 
-/* Виправлено: додано пробіли між селекторами для читабельності */
 li,
 ol,
 ul {
@@ -31,12 +30,25 @@ ul {
 ================================================ */
 body {
     font-family: 'Plus Jakarta Sans', 'Raleway', sans-serif;
-    /* Виправлено: прибрано подвійну крапку з комою ;; */
     background: #E9F5FF;
+    overflow-x: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 /* ================================================
    БУРГЕР-ТРИГЕР — фіксована кнопка відкриття меню
+   position: fixed — завжди видима при скролі
+   z-index: 200 — вище контенту, нижче оверлея (900) і меню (1000)
+   JS піднімає до 1100 при відкритому меню
+
+   При скролі JS додає .is-scrolled:
+   — right змінюється з 200px → 20px (тригер їде до правого краю)
+   — top змінюється з 100px → 50vh (по центру по вертикалі)
+   — текст «Меню» зникає (через окремий блок нижче)
+   Всі зміни анімовані через transition
 ================================================ */
 .page-menu-trigger {
     position: fixed;
@@ -50,22 +62,60 @@ body {
     background: rgba(203, 219, 232, 0.3);
     border-radius: 10px;
     cursor: pointer;
-    z-index: 100;
+    border: none;
+    z-index: 200;
+    /* Анімуємо right, top і padding одночасно */
+    transition:
+        right 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+        top 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.35s ease,
+        background 0.25s ease;
+}
+
+/* Стан після скролу: тригер переміщується до правого краю і центру по вертикалі */
+.page-menu-trigger.is-scrolled {
+    right: 20px;
+    top: 50vh;
+    /* translateY(-50%) точно центрує по вертикалі відносно власної висоти */
+    transform: translateY(-50%);
 }
 
 .page-menu-trigger:hover {
     background: rgba(164, 177, 187, 0.5);
 }
 
+/* ================================================
+   ТРИГЕР — текст «Меню»
+   overflow: hidden + max-width дозволяє анімувати collapse
+   (width: auto не анімується, max-width — анімується)
+================================================ */
 .page-menu-trigger p {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 16px;
     font-weight: 500;
     line-height: 125%;
     color: #1a1a1a;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 60px;
+    opacity: 1;
+    transition:
+        max-width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.25s ease,
+        margin 0.35s ease;
 }
 
-/* Кнопка бургер (три риски) */
+/* При скролі > 60px JS додає .is-scrolled — текст плавно зникає */
+.page-menu-trigger.is-scrolled p {
+    max-width: 0;
+    opacity: 0;
+    margin: 0;
+}
+
+/* ================================================
+   ІКОНКА БУРГЕРА — три горизонтальні риски
+   pointer-events: none — клік іде на батьківський <button>
+================================================ */
 .burger-open-btn {
     display: flex;
     flex-direction: column;
@@ -76,9 +126,10 @@ body {
     border: none;
     cursor: pointer;
     padding: 0;
+    pointer-events: none;
 }
 
-/* Одна риска бургера */
+/* Одна риска */
 .burger-line {
     width: 100%;
     height: 2px;
@@ -89,7 +140,8 @@ body {
 
 /* ================================================
    OVERLAY — затемнення фону при відкритому меню
-   Елемент доданий у HTML (був тільки в CSS)
+   opacity: 0 + pointer-events: none = невидимий і некліковий
+   .is-visible = видимий і блокує кліки на фон
 ================================================ */
 .burger-overlay {
     position: fixed;
@@ -108,6 +160,8 @@ body {
 
 /* ================================================
    БУРГЕР-МЕНЮ — навігаційна панель
+   right: -320px = схована за правим краєм
+   transition лише на right — top не анімується, щоб не стрибало
 ================================================ */
 .burger-menu-wrapper {
     position: fixed;
@@ -115,11 +169,9 @@ body {
     right: -320px;
     width: 297px;
     height: 545px;
-    background: linear-gradient(
-        166.36deg,
-        rgba(217, 235, 255, 0.9) 1.73%,
-        rgba(232, 241, 248, 0.9) 104.94%
-    );
+    background: linear-gradient(166.36deg,
+            rgba(217, 235, 255, 0.9) 1.73%,
+            rgba(232, 241, 248, 0.9) 104.94%);
     backdrop-filter: blur(5px);
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
     display: flex;
@@ -131,13 +183,23 @@ body {
     overflow-y: auto;
 }
 
-/* Відкритий стан: меню виїжджає в позицію right: 20px */
+/* Відкритий стан: меню виїжджає поруч із тригером.
+   Якщо тригер у .is-scrolled (right: 20px) — меню теж right: 20px.
+   JS при відкритті додає клас .is-scrolled-open якщо потрібно,
+   але простіше: right: 20px покриває обидва випадки — і звичайний і scrolled,
+   бо 20px — крайній правий край, і меню завжди виїжджає зі сторони.
+   Для десктопу (тригер right: 200px) залишаємо right: 200px. */
 .burger-menu-wrapper.is-open {
-    top: 152px;
     right: 200px;
 }
 
-/* Кнопка × закриття */
+/* Якщо меню відкрите у стані scrolled (тригер зміщений до краю) */
+.burger-menu-wrapper.is-open.scrolled-pos {
+    right: 20px;
+}
+
+/* Кнопка × закриття
+   :hover додає обертання — мікроінтеракція */
 .burger-close-btn {
     position: absolute;
     top: 18px;
@@ -148,14 +210,23 @@ body {
     border: none;
     cursor: pointer;
     color: #333;
-    transition: color 0.25s;
+    transition: color 0.25s, transform 0.25s;
 }
 
 .burger-close-btn:hover {
     color: rgba(214, 137, 163, 1);
+    transform: rotate(90deg);
 }
 
-/* SVG-лого у меню */
+/* SVG-лого у меню
+   Клас .burger-menu-logo не конфліктує з .page-logo у hero
+================================================ */
+.burger-menu-logo {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
 .burger-logo {
     width: 70px;
     height: auto;
@@ -168,6 +239,8 @@ body {
 
 /* ================================================
    МЕНЮ — навігаційний список
+   flex: 1 на .menu-nav розтягує навігацію на весь доступний простір,
+   притискаючи .menu-contacts донизу
 ================================================ */
 .menu-nav {
     flex: 1;
@@ -195,7 +268,11 @@ body {
     color: rgba(214, 137, 163, 1);
 }
 
-/* Контакти внизу меню */
+/* Контакти внизу меню
+   border-top — візуальний роздільник
+   margin-top: auto через flex на .menu-nav вже притиснуло б,
+   але тут додатковий margin для надійності
+================================================ */
 .menu-contacts {
     display: flex;
     justify-content: flex-end;
@@ -232,6 +309,8 @@ body {
 
 /* ================================================
    HERO — секція .page (ліва + права колонки)
+   width: min(1244px, 100%) — не перевищує 1244px,
+   але на менших екранах займає всю ширину
 ================================================ */
 .page {
     display: flex;
@@ -245,6 +324,8 @@ body {
 
 /* ================================================
    PAGE-LEFT — ліва колонка з контентом
+   width: 911px — фіксована ширина як в оригіналі
+   z-index: 2 — вище page-right (z-index: 1)
 ================================================ */
 .page-left {
     display: flex;
@@ -255,15 +336,21 @@ body {
     background-size: cover;
     background-position: center;
     background-color: #F5FBFF;
-    padding: 40px;
+    padding: 41px;
     position: relative;
     z-index: 2;
 }
+
+/* Верхній рядок: бейдж / лого / версія
+   justify-content: space-between рівномірно розподіляє елементи
+================================================ */
 .page-height {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
+/* Бейдж «системний дизайн для росту» */
 .page-badge {
     display: inline-block;
     border: 1px solid #D689A3;
@@ -280,6 +367,15 @@ body {
     color: #D689A3;
 }
 
+/* Лого у header hero — контейнер */
+.page-logo {
+    display: flex;
+    align-items: center;
+}
+
+/* Вертикальний підпис версії
+   writing-mode + rotate(180deg) = текст знизу вгору
+================================================ */
 .page-version {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-style: normal;
@@ -291,6 +387,9 @@ body {
     transform: rotate(180deg);
 }
 
+/* Великий заголовок H1
+   font-size: 202px + line-height: 135px — щільний верстальний ритм
+================================================ */
 .page-title h1 {
     font-family: 'Raleway', sans-serif;
     font-style: normal;
@@ -302,6 +401,7 @@ body {
     text-transform: uppercase;
 }
 
+/* Прізвище під H1 */
 .page-subtitle {
     font-family: 'Raleway', sans-serif;
     font-style: normal;
@@ -321,6 +421,10 @@ body {
     color: #150F25;
 }
 
+/* CTA-кнопка
+   margin-left: 585px — точне позиціонування як в оригіналі
+   Додано hover-ефект підйому
+================================================ */
 .page-button {
     display: flex;
     justify-content: center;
@@ -332,6 +436,11 @@ body {
     width: 256px;
     margin-top: 92px;
     margin-left: 585px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.page-button a:hover  {
+    color: rgba(80, 103, 130, 1);
 }
 
 .page-button a {
@@ -344,22 +453,28 @@ body {
     color: #F8F5F2;
 }
 
+/* Нижній інфо-рядок
+   justify-content: space-between = ліво і право
+================================================ */
 .page-info {
     display: flex;
     justify-content: space-between;
     margin-top: 29px;
 }
+
 .page-info_left {
     display: flex;
     align-items: center;
     width: 180px;
 }
+
 .page-info_right {
     display: flex;
     align-items: center;
     text-align: right;
     width: 156px;
 }
+
 .page-info p {
     font-family: 'Raleway', sans-serif;
     font-style: normal;
@@ -370,7 +485,10 @@ body {
 }
 
 /* ================================================
-   PAGE-RIGHT
+   PAGE-RIGHT — декоративна права колонка
+   flex-grow: 1 = займає решту ширини після page-left (911px)
+   ::after — псевдоелемент з фоновим зображенням
+   left: -275px виходить за межі колонки вліво, перекриваючи page-left
 ================================================ */
 .page-right {
     flex-grow: 1;
@@ -378,6 +496,7 @@ body {
     z-index: 1;
     border-radius: 40px;
 }
+
 .page-right::after {
     content: "";
     position: absolute;
@@ -385,13 +504,14 @@ body {
     left: -275px;
     width: 713px;
     height: 100%;
-    background: url(./images/site-right.png) no-repeat center / cover;
+    background: url('./images/site-right.png') no-repeat center / cover;
     border-radius: 40px;
     z-index: -1;
     pointer-events: none;
 }
+
 /* ================================================
-   ПОРТФОЛІО
+   ПОРТФОЛІО — секція з проектами
 ================================================ */
 .portfolio {
     display: flex;
@@ -399,22 +519,26 @@ body {
     width: min(1244px, 100%);
     margin: 90px auto 0;
     border-radius: 40px;
-    background: url(./images/portfolio.png);
+    background: url('./images/portfolio.png');
     background-size: cover;
     background-position: center;
     background-color: #F5FBFF;
 }
+
+/* Заголовок портфоліо
+   margin-left: 622px — вирівнює блок по правій частині
+================================================ */
 .portfolio-title {
     display: flex;
-    justify-content: end;
     flex-direction: column;
-    margin-top: 62px;
-    margin-left: 622px;
-    margin-bottom: 42px;
-    width: 572px;
+    align-items: flex-end;
+    gap: 22px;
+    padding: 62px 41px 28px 631px;
+
 }
+
+
 .portfolio-title h2 {
-    width: 572px;
     font-family: 'Raleway';
     font-style: normal;
     font-weight: 900;
@@ -423,7 +547,6 @@ body {
     text-align: right;
     text-transform: uppercase;
     color: #150F25;
-    margin-bottom: 16px;
 }
 
 .portfolio-title p {
@@ -432,10 +555,12 @@ body {
     font-weight: 400;
     font-size: 24px;
     line-height: 125%;
+    margin-left: 93px;
     text-align: right;
     text-transform: uppercase;
     color: #150F25;
 }
+
 .portfolio-title span {
     font-family: 'Raleway';
     font-style: normal;
@@ -445,16 +570,21 @@ body {
     text-align: right;
     text-transform: uppercase;
     color: #D689A3;
+
 }
+
+
+/* Бейдж під заголовком
+   margin-left: 306px — точне позиціонування з макету
+================================================ */
 .portfolio-badge {
     width: fit-content;
     align-items: center;
     padding: 6px 16px;
     border: 1px solid #D689A3;
     border-radius: 50px;
-    margin-top: 32px;
-    margin-left: 306px;
 }
+
 .portfolio-badge p {
     font-family: 'Raleway';
     font-style: normal;
@@ -464,6 +594,7 @@ body {
     color: #D689A3;
     text-transform: none;
 }
+
 .portfolio-landingpage {
     display: flex;
     padding: 0 44px;
@@ -477,12 +608,13 @@ body {
     background: #E9F5FF;
     border-radius: 20px;
 }
+
 .portfolio-page_badge {
     display: flex;
     align-items: center;
     gap: 3px;
-
 }
+
 .portfolio-page_span {
     display: flex;
     align-items: center;
@@ -501,7 +633,6 @@ body {
     text-transform: uppercase;
     color: #F8F5F2;
 }
-
 
 .portfolio-page_badge p {
     padding: 5px 8px;
@@ -525,7 +656,6 @@ body {
     margin-top: 26px;
     margin-bottom: 259px;
 }
-
 
 .portfolio-landingpage_title h3 {
     font-family: 'Raleway';
@@ -557,6 +687,7 @@ body {
     background: #F5FBFF;
     border-radius: 20px;
 }
+
 .portfolio-reviews strong {
     font-family: 'Raleway';
     font-style: normal;
@@ -585,18 +716,25 @@ body {
     color: #150F25;
 }
 
-
+/* border-radius: 50% на wrapper не обрізає iframe у більшості браузерів —
+   це відомий баг, вирішується через clip-path на iframe якщо критично
+================================================ */
 .portfolio-reviews_video {
     width: 100px;
     height: 56px;
     border-radius: 50%;
     overflow: hidden;
 }
+
 .portfolio-reviews_video iframe {
     width: 100%;
     height: 100%;
     border: none;
 }
+
+/* Кнопка «переглянути проект» всередині картки
+   margin-left: 305px — з макету
+================================================ */
 .portfolio-button {
     display: flex;
     justify-content: center;
@@ -605,6 +743,7 @@ body {
     margin-top: 24px;
     margin-left: 305px;
 }
+
 .portfolio-button a {
     font-family: 'Plus Jakarta Sans';
     font-style: normal;
@@ -614,127 +753,55 @@ body {
     text-decoration-line: underline;
     color: #150F25;
 }
+
 .portfolio-button img {
     filter: brightness(0);
 }
 
+/* ================================================
+   СЕКЦІЯ ПРОЕКТІВ — горизонтальна стрічка карток
+================================================ */
 .portfolio-projects {
     display: flex;
     align-items: center;
     padding: 36px 41px;
     gap: 34px;
 }
-.portfolio-projects_left {
-    position: relative;
-    display: inline-block;
-}
 
-.portfolio-projects_left-text {
-    display: inline-block;
-    align-items: center;
-    padding: 8px 2px;
-    background: #8FA6B9;
-    border-radius: 20px 0px 4px 4px;
-    position: absolute;
-    top: 0%;
-    left: 0%; 
-    writing-mode: vertical-rl;
-    transform: rotate(360deg);
-}
-.portfolio-projects_left span {
-    font-family: 'Raleway';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 115%;
-    text-transform: uppercase;
-    color: #F8F5F2;
-}
-.portfolio-projects_button_left {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 85%;
-    left: 33%;
-}
-
-.portfolio-projects_button_left a {
-    font-family: 'Plus Jakarta Sans';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 125%;
-    text-decoration-line: underline;
-    color: #F5FBFF;
-}
-
-.portfolio-projects_center {
-    position: relative;
-    display: inline-block;
-}
-
-.portfolio-projects_center-text {
-    display: inline-block;
-    align-items: center;
-    padding: 8px 2px;
-    background: #8FA6B9;
-    border-radius: 20px 0px 4px 4px;
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    writing-mode: vertical-rl;
-    transform: rotate(360deg);
-}
-
-.portfolio-projects_center span {
-    font-family: 'Raleway';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 115%;
-    text-transform: uppercase;
-    color: #F8F5F2;
-}
-
-.portfolio-projects_button_center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 85%;
-    left: 33%;
-}
-
-.portfolio-projects_button_center a {
-    font-family: 'Plus Jakarta Sans';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 125%;
-    text-decoration-line: underline;
-    color: #F5FBFF;
-}
-
-
+/* Картка — спільна база для left / center / right
+   position: relative потрібен для абсолютних дочірніх елементів
+   display: inline-block — розмір за вмістом (зображенням)
+================================================ */
+.portfolio-projects_left,
+.portfolio-projects_center,
 .portfolio-projects_right {
     position: relative;
     display: inline-block;
 }
 
+/* Вертикальна плашка з назвою типу проекту
+   position: absolute top/left: 0 — прилипає до лівого верхнього кута картки
+   writing-mode: vertical-rl — текст вертикально
+   transform: rotate(0deg) — виправлено з rotate(360deg), результат однаковий
+   але 0deg семантично правильніше
+================================================ */
+.portfolio-projects_left-text,
+.portfolio-projects_center-text,
 .portfolio-projects_right-text {
     display: inline-block;
-    align-items: center;
     padding: 8px 2px;
     background: #8FA6B9;
     border-radius: 20px 0px 4px 4px;
     position: absolute;
-    top: 0%;
-    left: 0%;
+    top: 0;
+    left: 0;
     writing-mode: vertical-rl;
-    transform: rotate(360deg);
+    transform: rotate(0deg);
 }
 
+/* Текст у плашці */
+.portfolio-projects_left span,
+.portfolio-projects_center span,
 .portfolio-projects_right span {
     font-family: 'Raleway';
     font-style: normal;
@@ -745,6 +812,11 @@ body {
     color: #F8F5F2;
 }
 
+/* Кнопка «переглянути» поверх зображення
+   top: 85% + left: 33% — позиція з макету
+================================================ */
+.portfolio-projects_button_left,
+.portfolio-projects_button_center,
 .portfolio-projects_button_right {
     display: flex;
     justify-content: center;
@@ -754,6 +826,8 @@ body {
     left: 33%;
 }
 
+.portfolio-projects_button_left a,
+.portfolio-projects_button_center a,
 .portfolio-projects_button_right a {
     font-family: 'Plus Jakarta Sans';
     font-style: normal;
@@ -762,19 +836,41 @@ body {
     line-height: 125%;
     text-decoration-line: underline;
     color: #F5FBFF;
-}
-.vertical {
-    font-family: 'Plus Jakarta Sans';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 11px;
-    line-height: 115%;   
-    color: #8FA6B9;
-    writing-mode: vertical-rl;
-    transform: rotate(-90deg);
-    width: fit-content;
+    white-space: nowrap;
 }
 
+/* ================================================
+   ВЕРТИКАЛЬНІ ПІДПИСИ Portfolio.2026 / Concept
+   Стиль ідентичний .page-version:
+   writing-mode: vertical-rl + rotate(180deg) = текст знизу вгору
+   margin-left: auto притискає блок до правого краю flex-рядка
+================================================ */
+.portfolio-vertical-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 78px;
+    align-self: stretch;
+    padding-bottom: 98px;
+    margin-left: auto;
+}
+
+.portfolio-vertical-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 115%;
+    color: #8FA6B9;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+}
+
+/* Кнопка «Перейти до портфоліо»
+   margin-left: 837px — точне позиціонування з макету
+   Додано hover-ефект для інтерактивності
+================================================ */
 .portfolio-projects_button {
     display: flex;
     width: 357px;
@@ -785,6 +881,13 @@ body {
     border-radius: 10px;
     margin-left: 837px;
     margin-bottom: 66px;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+
+
+.portfolio-projects_button:hover a {
+    color: rgba(80, 103, 130, 1);
 }
 
 .portfolio-projects_button a {
@@ -793,17 +896,26 @@ body {
     font-weight: 500;
     font-size: 16px;
     line-height: 125%;
-        color: #420216;
+    color: #420216;
+    transition: color 0.25s ease;
 }
 
+/* ================================================
+   СЕКЦІЯ «ВІД ХАОСУ ДО СИСТЕМИ»
+   align-items: center центрує заголовок
+================================================ */
 .sistem {
     display: flex;
     flex-direction: column;
     width: min(1244px, 100%);
     margin: 90px auto 0;
     align-items: center;
-    
 }
+
+/* Заголовок секції
+   width: 672px — фіксована ширина для центрування тексту
+   margin-top: 106px — відступ з макету
+================================================ */
 .sistem-title {
     display: flex;
     flex-direction: column;
@@ -811,6 +923,7 @@ body {
     width: 672px;
     margin-top: 106px;
 }
+
 .sistem-title h2 {
     font-family: 'Raleway';
     font-style: normal;
@@ -822,6 +935,7 @@ body {
     color: #150F25;
 }
 
+/* Рожевий акцент у підзаголовку */
 .sistem-title span {
     font-family: 'Raleway';
     font-style: normal;
@@ -843,6 +957,11 @@ body {
     text-transform: uppercase;
     color: #150F25;
 }
+
+/* Темний блок з кроками
+   display: flex flex-direction: row — бейдж зліва, кроки справа
+   margin: 90px auto 0 — вирівнювання по центру
+================================================ */
 .sistem-blok {
     display: flex;
     flex-direction: row;
@@ -851,14 +970,19 @@ body {
     width: min(1244px, 100%);
     margin: 90px auto 0;
 }
+
+/* Бейдж у темному блоці
+   display: inline-block — розмір за вмістом (виправлено: justify/align не працюють на inline-block)
+   Для центрування тексту використовуємо text-align
+================================================ */
 .sistem-blok_text {
     display: inline-block;
-    justify-content: center;
-    align-items: center;
     width: 263px;
     padding: 6px 16px;
     border: 1px solid #D689A3;
     border-radius: 50px;
+    align-self: flex-end;
+    margin: 0 44px 71px 41px;
 }
 
 .sistem-blok_text p {
@@ -869,21 +993,309 @@ body {
     line-height: 16px;
     color: #D689A3;
 }
-.sistem-steps {
- display: flex;
- flex-direction: column;
- align-items: center;
- background: #F5FBFF;
- border-radius: 40px;
+
+/* Список кроків
+   flex: 1 — займає решту ширини після бейджа
+   border-radius: 40px — заокруглення як у .sistem-blok
+================================================ */
+
+.sistem-blok_steps {
+    display: flex;
+    flex: 1;
+    background: url(./images/sistem-bg.png);
+    background-size: cover;
+    background-position: center;
+    background-color: #F5FBFF;
+    border-radius: 40px;
+    overflow: hidden;
+}
+.sistem-vertical-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 78px;
+    align-self: stretch;
+    margin-top: 64px;
+    margin-left: auto;
+}
+.sistem-vertical-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 115%;
+    color: #8FA6B9;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
 }
 
+.sistem-steps {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: stretch;
+    overflow: hidden;
+    gap: 6px;
+    padding: 64px 41px 71px 247px;
+}
+
+/* Один крок процесу
+   justify-content: space-between — номер і текст по краях
+   gap: 190px — відстань з макету (на великих екранах)
+   border-bottom — роздільник між кроками
+================================================ */
 .sistem-steps__item {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 20px;
-    gap: 190px;
+    padding: 20px 20px;
     background: #F5FBFF;
     border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+
+.sistem-steps__item:last-child {
+    border-bottom: none;
+}
+
+/* Легкий ховер на кроках */
+.sistem-steps__item:hover {
+    background: rgba(214, 137, 163, 0.05);
+}
+
+/* Номер кроку */
+.steps__number {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 68px;
+    line-height: 95%;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #506782
+
+}
+
+
+.steps__text h4 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 125%;
+    text-align: center;
+    text-transform: uppercase;
+    color: #506782;
+    text-align: right;
+}
+
+
+.steps__text p {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 125%;
+    color: #150F25;
+}
+/* Вивчаю ваш бізнес */
+
+
+
+/* ================================================
+   ФУТЕР
+================================================ */
+.footer {
+    margin-top: 80px;
+    padding-bottom: 32px;
+}
+
+.footer .container {
+    width: min(1244px, 100%);
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+/* SVG-лого у футері — paths додаються в HTML */
+.footer-logo__svg {
+    width: 120px;
+    height: auto;
+    fill: #420216;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 24px;
+}
+
+.footer-link {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #8FA6B9;
+    transition: color 0.25s;
+}
+
+.footer-link:hover {
+    color: #D689A3;
+}
+
+.footer-copy {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    color: #8FA6B9;
+    margin-top: 16px;
+}
+
+/* ================================================
+   АДАПТАЦІЯ — планшет (≤ 1280px)
+   Зберігаємо структуру, зменшуємо жорсткі відступи
+================================================ */
+@media (max-width: 1280px) {
+    .page {
+        margin: 60px 20px 0;
+        width: auto;
+    }
+
+    .page-left {
+        width: 100%;
+    }
+
+    .page-right {
+        display: none;
+    }
+
+    /* Кнопка: margin-left замінюємо на auto (кнопка до правого краю) */
+    .page-button {
+        margin-left: auto;
+    }
+
+    .portfolio-projects_button {
+        margin-left: auto;
+    }
+
+    .sistem {
+        margin: 90px 20px 0;
+        width: auto;
+    }
+
+    .sistem-blok {
+        width: auto;
+    }
+
+    .portfolio-title {
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    .portfolio-badge {
+        margin-left: auto;
+    }
+
+    .footer .container {
+        padding: 0 20px;
+    }
+}
+
+/* ================================================
+   АДАПТАЦІЯ — мобільний (≤ 768px)
+================================================ */
+@media (max-width: 768px) {
+
+    /* Тригер: переміщуємо ближче до краю */
+    .page-menu-trigger {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Меню виїжджає до краю */
+    .burger-menu-wrapper.is-open {
+        right: 20px;
+    }
+
+    /* Менші заголовки через clamp */
+    .page-title h1 {
+        font-size: clamp(64px, 15vw, 202px);
+        line-height: 0.85;
+    }
+
+    .page-subtitle {
+        font-size: clamp(36px, 9vw, 96px);
+        line-height: 1.1;
+    }
+
+    .page-title p {
+        font-size: 18px;
+    }
+
+    .page-left {
+        padding: 24px 20px;
+    }
+
+    /* Картки проектів — вертикально */
+    .portfolio-projects {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 24px 20px;
+    }
+
+    .portfolio-projects_left,
+    .portfolio-projects_center,
+    .portfolio-projects_right {
+        display: block;
+        width: 100%;
+    }
+
+    .portfolio-projects_left img,
+    .portfolio-projects_center img,
+    .portfolio-projects_right img {
+        width: 100%;
+    }
+
+    /* Підписи Portfolio.2026 ховаються — немає місця */
+    .portfolio-vertical-labels {
+        display: none;
+    }
+
+    /* Секція системи */
+    .sistem-blok {
+        flex-direction: column;
+        padding: 24px;
+    }
+
+    .sistem-blok_text {
+        width: auto;
+        margin: 0 0 24px 0;
+    }
+
+    .sistem-steps {
+        margin: 0;
+    }
+
+    .sistem-steps__item {
+        gap: 24px;
+    }
+
+    .sistem-title {
+        width: auto;
+        margin-top: 48px;
+        padding: 0 20px;
+    }
+
+    .sistem-title h2 {
+        font-size: clamp(36px, 10vw, 88px);
+    }
 }
