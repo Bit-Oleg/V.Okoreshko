@@ -165,7 +165,7 @@ html {
 ================================================ */
 .burger-menu-wrapper {
     position: fixed;
-    top: 106px;
+    top: 180px;
     right: -320px;
     width: 297px;
     height: 545px;
@@ -190,7 +190,7 @@ html {
    бо 20px — крайній правий край, і меню завжди виїжджає зі сторони.
    Для десктопу (тригер right: 200px) залишаємо right: 200px. */
 .burger-menu-wrapper.is-open {
-    right: 200px;
+    right: 180px;
 }
 
 /* Якщо меню відкрите у стані scrolled (тригер зміщений до краю) */
@@ -228,7 +228,7 @@ html {
 }
 
 .burger-logo {
-    width: 70px;
+    width: 124px;
     height: auto;
     writing-mode: vertical-rl;
     transform: rotate(90deg);
@@ -421,41 +421,40 @@ html {
     color: #150F25;
 }
 
-/* CTA-кнопка
-   margin-left: 585px — точне позиціонування як в оригіналі
-   Додано hover-ефект підйому
-================================================ */
+
 .page-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    gap: 10px;
+    padding: 0px;
     background: #420216;
     border-radius: 10px;
     width: 256px;
     margin-top: 92px;
     margin-left: 585px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.page-button a:hover  {
-    color: rgba(80, 103, 130, 1);
+
+.page-button:hover {
+    background: #D689A3;
 }
 
 .page-button a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 125%;
+    width: 100%;
+    padding: 20px;
     text-decoration: underline;
     color: #F8F5F2;
 }
 
-/* Нижній інфо-рядок
-   justify-content: space-between = ліво і право
-================================================ */
 .page-info {
     display: flex;
     justify-content: space-between;
@@ -484,12 +483,6 @@ html {
     color: #150F25;
 }
 
-/* ================================================
-   PAGE-RIGHT — декоративна права колонка
-   flex-grow: 1 = займає решту ширини після page-left (911px)
-   ::after — псевдоелемент з фоновим зображенням
-   left: -275px виходить за межі колонки вліво, перекриваючи page-left
-================================================ */
 .page-right {
     flex-grow: 1;
     position: relative;
@@ -525,9 +518,6 @@ html {
     background-color: #F5FBFF;
 }
 
-/* Заголовок портфоліо
-   margin-left: 622px — вирівнює блок по правій частині
-================================================ */
 .portfolio-title {
     display: flex;
     flex-direction: column;
@@ -548,6 +538,9 @@ html {
     text-transform: uppercase;
     color: #150F25;
 }
+ .portfolio-subtitle {
+    margin-left: 108px;
+ }
 
 .portfolio-title p {
     font-family: 'Raleway';
@@ -555,7 +548,6 @@ html {
     font-weight: 400;
     font-size: 24px;
     line-height: 125%;
-    margin-left: 93px;
     text-align: right;
     text-transform: uppercase;
     color: #150F25;
@@ -573,11 +565,9 @@ html {
 
 }
 
-
-/* Бейдж під заголовком
-   margin-left: 306px — точне позиціонування з макету
-================================================ */
 .portfolio-badge {
+    display: flex;
+    justify-content: center;
     width: fit-content;
     align-items: center;
     padding: 6px 16px;
@@ -636,7 +626,7 @@ html {
 
 .portfolio-page_badge p {
     padding: 5px 8px;
-    border: 1px solid #150F25;
+    box-shadow: 0 0 0 0.5px #150F25;
     border-radius: 22px;
     gap: 5px;
     width: fit-content;
@@ -673,10 +663,9 @@ html {
     font-weight: 400;
     font-size: 16px;
     line-height: 125%;
-    font-variant: small-caps;
-    text-transform: none;
     color: #150F25;
 }
+
 
 .portfolio-reviews {
     display: flex;
@@ -716,25 +705,22 @@ html {
     color: #150F25;
 }
 
-/* border-radius: 50% на wrapper не обрізає iframe у більшості браузерів —
-   це відомий баг, вирішується через clip-path на iframe якщо критично
-================================================ */
+.portfolio-reviews p span {
+    font-family: 'Raleway';
+    font-style: italic;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 125%;
+    color: #D689A3;
+}
+
 .portfolio-reviews_video {
     width: 100px;
     height: 56px;
-    border-radius: 50%;
-    overflow: hidden;
+    position: relative;
 }
 
-.portfolio-reviews_video iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
 
-/* Кнопка «переглянути проект» всередині картки
-   margin-left: 305px — з макету
-================================================ */
 .portfolio-button {
     display: flex;
     justify-content: center;
@@ -744,7 +730,7 @@ html {
     margin-left: 305px;
 }
 
-.portfolio-button a {
+.portfolio__link {
     font-family: 'Plus Jakarta Sans';
     font-style: normal;
     font-weight: 700;
@@ -768,10 +754,6 @@ html {
     gap: 34px;
 }
 
-/* Картка — спільна база для left / center / right
-   position: relative потрібен для абсолютних дочірніх елементів
-   display: inline-block — розмір за вмістом (зображенням)
-================================================ */
 .portfolio-projects_left,
 .portfolio-projects_center,
 .portfolio-projects_right {
@@ -779,12 +761,6 @@ html {
     display: inline-block;
 }
 
-/* Вертикальна плашка з назвою типу проекту
-   position: absolute top/left: 0 — прилипає до лівого верхнього кута картки
-   writing-mode: vertical-rl — текст вертикально
-   transform: rotate(0deg) — виправлено з rotate(360deg), результат однаковий
-   але 0deg семантично правильніше
-================================================ */
 .portfolio-projects_left-text,
 .portfolio-projects_center-text,
 .portfolio-projects_right-text {
@@ -799,7 +775,7 @@ html {
     transform: rotate(0deg);
 }
 
-/* Текст у плашці */
+
 .portfolio-projects_left span,
 .portfolio-projects_center span,
 .portfolio-projects_right span {
@@ -812,9 +788,6 @@ html {
     color: #F8F5F2;
 }
 
-/* Кнопка «переглянути» поверх зображення
-   top: 85% + left: 33% — позиція з макету
-================================================ */
 .portfolio-projects_button_left,
 .portfolio-projects_button_center,
 .portfolio-projects_button_right {
@@ -886,8 +859,8 @@ html {
 
 
 
-.portfolio-projects_button:hover a {
-    color: rgba(80, 103, 130, 1);
+.portfolio-projects_button:hover  {
+    background: #D689A3;
 }
 
 .portfolio-projects_button a {
@@ -900,10 +873,6 @@ html {
     transition: color 0.25s ease;
 }
 
-/* ================================================
-   СЕКЦІЯ «ВІД ХАОСУ ДО СИСТЕМИ»
-   align-items: center центрує заголовок
-================================================ */
 .sistem {
     display: flex;
     flex-direction: column;
@@ -912,10 +881,6 @@ html {
     align-items: center;
 }
 
-/* Заголовок секції
-   width: 672px — фіксована ширина для центрування тексту
-   margin-top: 106px — відступ з макету
-================================================ */
 .sistem-title {
     display: flex;
     flex-direction: column;
@@ -935,7 +900,6 @@ html {
     color: #150F25;
 }
 
-/* Рожевий акцент у підзаголовку */
 .sistem-title span {
     font-family: 'Raleway';
     font-style: normal;
@@ -958,10 +922,6 @@ html {
     color: #150F25;
 }
 
-/* Темний блок з кроками
-   display: flex flex-direction: row — бейдж зліва, кроки справа
-   margin: 90px auto 0 — вирівнювання по центру
-================================================ */
 .sistem-blok {
     display: flex;
     flex-direction: row;
@@ -971,10 +931,6 @@ html {
     margin: 90px auto 0;
 }
 
-/* Бейдж у темному блоці
-   display: inline-block — розмір за вмістом (виправлено: justify/align не працюють на inline-block)
-   Для центрування тексту використовуємо text-align
-================================================ */
 .sistem-blok_text {
     display: inline-block;
     width: 263px;
@@ -994,10 +950,6 @@ html {
     color: #D689A3;
 }
 
-/* Список кроків
-   flex: 1 — займає решту ширини після бейджа
-   border-radius: 40px — заокруглення як у .sistem-blok
-================================================ */
 
 .sistem-blok_steps {
     display: flex;
@@ -1040,11 +992,6 @@ html {
     padding: 64px 41px 71px 247px;
 }
 
-/* Один крок процесу
-   justify-content: space-between — номер і текст по краях
-   gap: 190px — відстань з макету (на великих екранах)
-   border-bottom — роздільник між кроками
-================================================ */
 .sistem-steps__item {
     display: flex;
     flex-direction: row;
@@ -1061,12 +1008,10 @@ html {
     border-bottom: none;
 }
 
-/* Легкий ховер на кроках */
 .sistem-steps__item:hover {
     background: rgba(214, 137, 163, 0.05);
 }
 
-/* Номер кроку */
 .steps__number {
     font-family: 'Raleway';
     font-style: normal;
@@ -1101,43 +1046,425 @@ html {
     line-height: 125%;
     color: #150F25;
 }
-/* Вивчаю ваш бізнес */
+
+.result {
+    display: flex;
+    width: min(1244px, 100%);
+    margin: 90px auto 0;
+    margin-top: 92px;
+    border-radius: 40px;
+    background: url('./images/resultbg.png');
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(203, 219, 232, 0.3);
+}
+.result-left {
+    display: flex;
+    flex-direction: column;
+    margin: 58px 0 58px 41px;
+}
+.result-left_title {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.result-left_title h2 {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 900;
+        font-size: 88px;
+        line-height: 95%;
+        text-transform: uppercase;
+        color: #150F25;
+}
+.result-left_card-goit {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    gap: 8px;
+    border-radius: 20px;
+    background: #E9F5FF;
+}
+
+.result-left_card-design {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    gap: 8px;
+    border-radius: 20px;
+    background: #E9F5FF;
+}
+.result-left_title p {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 125%;
+        text-transform: uppercase;
+        color: #D689A3;
+}
+.result-left_card {
+    display: flex;
+    margin-top: 71px;
+    gap: 16px;
+
+}
+.result-left_card h3 {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 115%;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        color: #27252D;
+}
+.result-left_card p {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 125%;
+        color: #27252D;
+}
 
 
+.result-left_world {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+    gap: 8px;
+    background: #E9F5FF;
+    border-radius: 20px;
+    margin-top: 16px;
+}
+.result-left_world h3 {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 115%;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        color: #27252D;
+}
+.result-left_world p {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 125%;
+        letter-spacing: 1px;
+        color: #27252D;
+}
 
+.result-right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 1935px;
+    height: 511px;
+    margin: 226px 41px 50px 59px;
+    overflow: hidden;
+    border-radius: 20px;
+}
+.result-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.3);
+    transform-origin: 20% 86%;
+    border-radius: 20px;
+
+}
+.result-right_text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+    gap: 8px;
+    background: linear-gradient(90deg, #420216 55.82%, #D689A3 186.26%);
+    border-radius: 20px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+}
+.result-right_text h3 {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 115%;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        color: #F8F5F2;
+}
+.result-right_text p {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 125%;
+        font-variant: small-caps;
+        letter-spacing: 1px;
+        color: #F8F5F2;
+}
+.sertificat {
+        display: flex;
+        width: min(1244px, 100%);
+        margin: 90px auto 0;
+        margin-top: 92px;
+        border-radius: 40px;
+        padding: 40px 41px;
+        background: url('./images/resultbg.png');
+        background-size: cover;
+        background-position: center;
+        background-color: rgba(203, 219, 232, 0.3);
+}
+.sertificat-text {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        flex-direction: column;
+        align-items: flex-end;
+        padding: 0px 16px;
+        gap: 14px;
+}
+
+.sertificat-text_title {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 16px 24px;
+        gap: 10px;
+        border: 1px solid #D689A3;
+        border-radius: 50px;
+}
+.sertificat-text h3 {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 125%;
+        text-align: right;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        color: #27252D;
+}
+.sertificat-text p {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 125%;
+        text-align: right;
+        letter-spacing: 1px;
+        text-indent: 81px;
+        font-variant: small-caps;
+        color: #151419;
+}
+.sertificat-design {
+        margin-left: 12px;
+        margin-right: 12px;
+}
+.sertificat-web {
+    margin-top: 83px;
+}
+.real {
+    display: flex;
+    flex-direction: column;
+    width: min(1244px, 100%);
+    margin: 90px auto 0;
+    margin-top: 92px;
+    border-radius: 40px;
+    padding: 40px 41px;
+    background: url('./images/resultbg.png');
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(203, 219, 232, 0.3);
+}
+.real-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+    margin-left: 445px;
+}
+.real-title h2 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 88px;
+    line-height: 95%;
+    text-align: right;
+    text-transform: uppercase;
+    color: #150F25;
+}
+.real-title span {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 125%;
+    text-align: right;
+    text-transform: uppercase;
+    color: #D689A3;
+}
+.real-title p {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 125%;
+    text-align: right;
+    text-transform: uppercase;
+    color: #150F25;
+}
+
+.real-card {
+    display: flex;
+    margin-top: 42px;
+    gap: 24px;
+}
+.real-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+.real-cards h3 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 115%;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #27252D;
+    margin-bottom: 4px;
+}
+.real-cards span {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: -0.01em;
+    color: #D689A3;
+    margin-bottom: 16px;
+}
+.real-cards p {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 125%;
+    font-variant: small-caps;
+    color: #27252D;
+
+}
+.real-cards div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+    width: 290px;
+    background: #E9F5FF;
+    border-radius: 20px;
+}
+.real-card_consult {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+.real-card_consult h3 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 115%;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #27252D;
+}
+.real-card_consult span {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: -0.01em;
+    color: #D689A3;
+    margin-bottom: 227px;
+}
+.real-card_consult p{
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 125%;
+    font-variant: small-caps;
+    color: #27252D;
+}
+.real-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    background: #420216;
+    border-radius: 10px;
+    margin-top: 12px;
+    width: 256px;
+    transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+
+.real-button:hover {
+    background: #D689A3;
+}
+
+.real-button a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 125%;
+    width: 100%;
+    padding: 20px;
+    text-decoration: underline;
+    color: #F8F5F2;
+}
 /* ================================================
    ФУТЕР
 ================================================ */
 .footer {
-    margin-top: 80px;
-    padding-bottom: 32px;
-}
-
-.footer .container {
-    width: min(1244px, 100%);
-    margin: 0 auto;
-    padding: 0 40px;
-}
-
-.footer-logo {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-    padding: 24px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    background: #150F25;
+    border-radius: 50px 50px 0px 0px;
+    margin-top: 92px;
+}
+.footer-logo {
+    margin-top: 36px;
+    margin-right: 100px;
 }
 
-/* SVG-лого у футері — paths додаються в HTML */
 .footer-logo__svg {
     width: 120px;
     height: auto;
-    fill: #420216;
+    fill: #F8F5F2;
 }
 
 .footer-nav {
     display: flex;
+    margin-top: 86px;
+    margin-right: 78px;
     gap: 24px;
 }
 
@@ -1157,145 +1484,8 @@ html {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 12px;
     color: #8FA6B9;
-    margin-top: 16px;
+    margin-top: 179px;
+    margin-left: 85px;
+    margin-bottom: 13px;
 }
 
-/* ================================================
-   АДАПТАЦІЯ — планшет (≤ 1280px)
-   Зберігаємо структуру, зменшуємо жорсткі відступи
-================================================ */
-@media (max-width: 1280px) {
-    .page {
-        margin: 60px 20px 0;
-        width: auto;
-    }
-
-    .page-left {
-        width: 100%;
-    }
-
-    .page-right {
-        display: none;
-    }
-
-    /* Кнопка: margin-left замінюємо на auto (кнопка до правого краю) */
-    .page-button {
-        margin-left: auto;
-    }
-
-    .portfolio-projects_button {
-        margin-left: auto;
-    }
-
-    .sistem {
-        margin: 90px 20px 0;
-        width: auto;
-    }
-
-    .sistem-blok {
-        width: auto;
-    }
-
-    .portfolio-title {
-        margin-left: auto;
-        margin-right: 0;
-    }
-
-    .portfolio-badge {
-        margin-left: auto;
-    }
-
-    .footer .container {
-        padding: 0 20px;
-    }
-}
-
-/* ================================================
-   АДАПТАЦІЯ — мобільний (≤ 768px)
-================================================ */
-@media (max-width: 768px) {
-
-    /* Тригер: переміщуємо ближче до краю */
-    .page-menu-trigger {
-        top: 20px;
-        right: 20px;
-    }
-
-    /* Меню виїжджає до краю */
-    .burger-menu-wrapper.is-open {
-        right: 20px;
-    }
-
-    /* Менші заголовки через clamp */
-    .page-title h1 {
-        font-size: clamp(64px, 15vw, 202px);
-        line-height: 0.85;
-    }
-
-    .page-subtitle {
-        font-size: clamp(36px, 9vw, 96px);
-        line-height: 1.1;
-    }
-
-    .page-title p {
-        font-size: 18px;
-    }
-
-    .page-left {
-        padding: 24px 20px;
-    }
-
-    /* Картки проектів — вертикально */
-    .portfolio-projects {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 24px 20px;
-    }
-
-    .portfolio-projects_left,
-    .portfolio-projects_center,
-    .portfolio-projects_right {
-        display: block;
-        width: 100%;
-    }
-
-    .portfolio-projects_left img,
-    .portfolio-projects_center img,
-    .portfolio-projects_right img {
-        width: 100%;
-    }
-
-    /* Підписи Portfolio.2026 ховаються — немає місця */
-    .portfolio-vertical-labels {
-        display: none;
-    }
-
-    /* Секція системи */
-    .sistem-blok {
-        flex-direction: column;
-        padding: 24px;
-    }
-
-    .sistem-blok_text {
-        width: auto;
-        margin: 0 0 24px 0;
-    }
-
-    .sistem-steps {
-        margin: 0;
-    }
-
-    .sistem-steps__item {
-        gap: 24px;
-    }
-
-    .sistem-title {
-        width: auto;
-        margin-top: 48px;
-        padding: 0 20px;
-    }
-
-    .sistem-title h2 {
-        font-size: clamp(36px, 10vw, 88px);
-    }
-}
