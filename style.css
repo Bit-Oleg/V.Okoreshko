@@ -1,6 +1,3 @@
-/* ================================================
-   RESET — скидання стандартних стилів браузера
-================================================ */
 *,
 *::before,
 *::after {
@@ -25,9 +22,6 @@ ul {
     list-style: none;
 }
 
-/* ================================================
-   BASE — базові стилі сторінки
-================================================ */
 body {
     font-family: 'Plus Jakarta Sans', 'Raleway', sans-serif;
     background: #E9F5FF;
@@ -38,18 +32,6 @@ html {
     scroll-behavior: smooth;
 }
 
-/* ================================================
-   БУРГЕР-ТРИГЕР — фіксована кнопка відкриття меню
-   position: fixed — завжди видима при скролі
-   z-index: 200 — вище контенту, нижче оверлея (900) і меню (1000)
-   JS піднімає до 1100 при відкритому меню
-
-   При скролі JS додає .is-scrolled:
-   — right змінюється з 200px → 20px (тригер їде до правого краю)
-   — top змінюється з 100px → 50vh (по центру по вертикалі)
-   — текст «Меню» зникає (через окремий блок нижче)
-   Всі зміни анімовані через transition
-================================================ */
 .page-menu-trigger {
     position: fixed;
     top: 100px;
@@ -64,7 +46,6 @@ html {
     cursor: pointer;
     border: none;
     z-index: 200;
-    /* Анімуємо right, top і padding одночасно */
     transition:
         right 0.45s cubic-bezier(0.4, 0, 0.2, 1),
         top 0.45s cubic-bezier(0.4, 0, 0.2, 1),
@@ -72,11 +53,9 @@ html {
         background 0.25s ease;
 }
 
-/* Стан після скролу: тригер переміщується до правого краю і центру по вертикалі */
 .page-menu-trigger.is-scrolled {
     right: 20px;
     top: 50vh;
-    /* translateY(-50%) точно центрує по вертикалі відносно власної висоти */
     transform: translateY(-50%);
 }
 
@@ -84,11 +63,6 @@ html {
     background: rgba(164, 177, 187, 0.5);
 }
 
-/* ================================================
-   ТРИГЕР — текст «Меню»
-   overflow: hidden + max-width дозволяє анімувати collapse
-   (width: auto не анімується, max-width — анімується)
-================================================ */
 .page-menu-trigger p {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 16px;
@@ -105,17 +79,12 @@ html {
         margin 0.35s ease;
 }
 
-/* При скролі > 60px JS додає .is-scrolled — текст плавно зникає */
 .page-menu-trigger.is-scrolled p {
     max-width: 0;
     opacity: 0;
     margin: 0;
 }
 
-/* ================================================
-   ІКОНКА БУРГЕРА — три горизонтальні риски
-   pointer-events: none — клік іде на батьківський <button>
-================================================ */
 .burger-open-btn {
     display: flex;
     flex-direction: column;
@@ -129,7 +98,6 @@ html {
     pointer-events: none;
 }
 
-/* Одна риска */
 .burger-line {
     width: 100%;
     height: 2px;
@@ -138,11 +106,6 @@ html {
     transition: background-color 0.25s;
 }
 
-/* ================================================
-   OVERLAY — затемнення фону при відкритому меню
-   opacity: 0 + pointer-events: none = невидимий і некліковий
-   .is-visible = видимий і блокує кліки на фон
-================================================ */
 .burger-overlay {
     position: fixed;
     inset: 0;
@@ -158,11 +121,6 @@ html {
     pointer-events: all;
 }
 
-/* ================================================
-   БУРГЕР-МЕНЮ — навігаційна панель
-   right: -320px = схована за правим краєм
-   transition лише на right — top не анімується, щоб не стрибало
-================================================ */
 .burger-menu-wrapper {
     position: fixed;
     top: 180px;
@@ -183,23 +141,14 @@ html {
     overflow-y: auto;
 }
 
-/* Відкритий стан: меню виїжджає поруч із тригером.
-   Якщо тригер у .is-scrolled (right: 20px) — меню теж right: 20px.
-   JS при відкритті додає клас .is-scrolled-open якщо потрібно,
-   але простіше: right: 20px покриває обидва випадки — і звичайний і scrolled,
-   бо 20px — крайній правий край, і меню завжди виїжджає зі сторони.
-   Для десктопу (тригер right: 200px) залишаємо right: 200px. */
 .burger-menu-wrapper.is-open {
     right: 180px;
 }
 
-/* Якщо меню відкрите у стані scrolled (тригер зміщений до краю) */
 .burger-menu-wrapper.is-open.scrolled-pos {
     right: 20px;
 }
 
-/* Кнопка × закриття
-   :hover додає обертання — мікроінтеракція */
 .burger-close-btn {
     position: absolute;
     top: 18px;
@@ -208,6 +157,7 @@ html {
     line-height: 1;
     background: transparent;
     border: none;
+    outline: none;
     cursor: pointer;
     color: #333;
     transition: color 0.25s, transform 0.25s;
@@ -218,9 +168,6 @@ html {
     transform: rotate(90deg);
 }
 
-/* SVG-лого у меню
-   Клас .burger-menu-logo не конфліктує з .page-logo у hero
-================================================ */
 .burger-menu-logo {
     display: flex;
     align-items: flex-end;
@@ -237,11 +184,6 @@ html {
     fill: #420216;
 }
 
-/* ================================================
-   МЕНЮ — навігаційний список
-   flex: 1 на .menu-nav розтягує навігацію на весь доступний простір,
-   притискаючи .menu-contacts донизу
-================================================ */
 .menu-nav {
     flex: 1;
 }
@@ -268,11 +210,6 @@ html {
     color: rgba(214, 137, 163, 1);
 }
 
-/* Контакти внизу меню
-   border-top — візуальний роздільник
-   margin-top: auto через flex на .menu-nav вже притиснуло б,
-   але тут додатковий margin для надійності
-================================================ */
 .menu-contacts {
     display: flex;
     justify-content: flex-end;
@@ -298,20 +235,12 @@ html {
     color: rgba(214, 137, 163, 1);
 }
 
-/* ================================================
-   SITE LOGO — лого у hero-секції
-================================================ */
 .site-logo {
     width: 144px;
     height: auto;
     fill: rgba(66, 2, 22, 1);
 }
 
-/* ================================================
-   HERO — секція .page (ліва + права колонки)
-   width: min(1244px, 100%) — не перевищує 1244px,
-   але на менших екранах займає всю ширину
-================================================ */
 .page {
     display: flex;
     width: min(1244px, 100%);
@@ -322,11 +251,6 @@ html {
     background-color: #F5FBFF;
 }
 
-/* ================================================
-   PAGE-LEFT — ліва колонка з контентом
-   width: 911px — фіксована ширина як в оригіналі
-   z-index: 2 — вище page-right (z-index: 1)
-================================================ */
 .page-left {
     display: flex;
     flex-direction: column;
@@ -341,16 +265,12 @@ html {
     z-index: 2;
 }
 
-/* Верхній рядок: бейдж / лого / версія
-   justify-content: space-between рівномірно розподіляє елементи
-================================================ */
 .page-height {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-/* Бейдж «системний дизайн для росту» */
 .page-badge {
     display: inline-block;
     border: 1px solid #D689A3;
@@ -367,15 +287,11 @@ html {
     color: #D689A3;
 }
 
-/* Лого у header hero — контейнер */
 .page-logo {
     display: flex;
     align-items: center;
 }
 
-/* Вертикальний підпис версії
-   writing-mode + rotate(180deg) = текст знизу вгору
-================================================ */
 .page-version {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-style: normal;
@@ -387,9 +303,6 @@ html {
     transform: rotate(180deg);
 }
 
-/* Великий заголовок H1
-   font-size: 202px + line-height: 135px — щільний верстальний ритм
-================================================ */
 .page-title h1 {
     font-family: 'Raleway', sans-serif;
     font-style: normal;
@@ -401,7 +314,6 @@ html {
     text-transform: uppercase;
 }
 
-/* Прізвище під H1 */
 .page-subtitle {
     font-family: 'Raleway', sans-serif;
     font-style: normal;
@@ -503,9 +415,6 @@ html {
     pointer-events: none;
 }
 
-/* ================================================
-   ПОРТФОЛІО — секція з проектами
-================================================ */
 .portfolio {
     display: flex;
     flex-direction: column;
@@ -538,9 +447,10 @@ html {
     text-transform: uppercase;
     color: #150F25;
 }
- .portfolio-subtitle {
+
+.portfolio-subtitle {
     margin-left: 108px;
- }
+}
 
 .portfolio-title p {
     font-family: 'Raleway';
@@ -589,6 +499,21 @@ html {
     display: flex;
     padding: 0 44px;
     gap: 12px;
+}
+
+.portfolio-landingpage_img {
+    flex-shrink: 0;
+}
+
+.portfolio-landingpage_img img {
+    display: block;
+    border-radius: 40px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.portfolio-landingpage_img:hover img {
+    transform: scale(1.02);
+    box-shadow: 0 12px 36px rgba(21, 15, 37, 0.15);
 }
 
 .portfolio-landingpage_info {
@@ -744,9 +669,6 @@ html {
     filter: brightness(0);
 }
 
-/* ================================================
-   СЕКЦІЯ ПРОЕКТІВ — горизонтальна стрічка карток
-================================================ */
 .portfolio-projects {
     display: flex;
     align-items: center;
@@ -759,6 +681,21 @@ html {
 .portfolio-projects_right {
     position: relative;
     display: inline-block;
+}
+
+.portfolio-projects_left img,
+.portfolio-projects_center img,
+.portfolio-projects_right img {
+    display: block;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 40px;
+}
+
+.portfolio-projects_left:hover img,
+.portfolio-projects_center:hover img,
+.portfolio-projects_right:hover img {
+    transform: scale(1.02);
+    box-shadow: 0 12px 36px rgba(21, 15, 37, 0.15);
 }
 
 .portfolio-projects_left-text,
@@ -812,12 +749,6 @@ html {
     white-space: nowrap;
 }
 
-/* ================================================
-   ВЕРТИКАЛЬНІ ПІДПИСИ Portfolio.2026 / Concept
-   Стиль ідентичний .page-version:
-   writing-mode: vertical-rl + rotate(180deg) = текст знизу вгору
-   margin-left: auto притискає блок до правого краю flex-рядка
-================================================ */
 .portfolio-vertical-labels {
     display: flex;
     flex-direction: column;
@@ -840,10 +771,6 @@ html {
     white-space: nowrap;
 }
 
-/* Кнопка «Перейти до портфоліо»
-   margin-left: 837px — точне позиціонування з макету
-   Додано hover-ефект для інтерактивності
-================================================ */
 .portfolio-projects_button {
     display: flex;
     width: 357px;
@@ -859,7 +786,7 @@ html {
 
 
 
-.portfolio-projects_button:hover  {
+.portfolio-projects_button:hover {
     background: #D689A3;
 }
 
@@ -961,6 +888,7 @@ html {
     border-radius: 40px;
     overflow: hidden;
 }
+
 .sistem-vertical-labels {
     display: flex;
     flex-direction: column;
@@ -971,6 +899,7 @@ html {
     margin-top: 64px;
     margin-left: auto;
 }
+
 .sistem-vertical-label {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 500;
@@ -1021,7 +950,6 @@ html {
     letter-spacing: -0.02em;
     text-transform: uppercase;
     color: #506782
-
 }
 
 
@@ -1058,25 +986,29 @@ html {
     background-position: center;
     background-color: rgba(203, 219, 232, 0.3);
 }
+
 .result-left {
     display: flex;
     flex-direction: column;
     margin: 58px 0 58px 41px;
 }
+
 .result-left_title {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
+
 .result-left_title h2 {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 900;
-        font-size: 88px;
-        line-height: 95%;
-        text-transform: uppercase;
-        color: #150F25;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 88px;
+    line-height: 95%;
+    text-transform: uppercase;
+    color: #150F25;
 }
+
 .result-left_card-goit {
     display: flex;
     flex-direction: column;
@@ -1094,38 +1026,42 @@ html {
     border-radius: 20px;
     background: #E9F5FF;
 }
+
 .result-left_title p {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 24px;
-        line-height: 125%;
-        text-transform: uppercase;
-        color: #D689A3;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 125%;
+    text-transform: uppercase;
+    color: #D689A3;
 }
+
 .result-left_card {
     display: flex;
     margin-top: 71px;
     gap: 16px;
 
 }
+
 .result-left_card h3 {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 18px;
-        line-height: 115%;
-        letter-spacing: -0.02em;
-        text-transform: uppercase;
-        color: #27252D;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 115%;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #27252D;
 }
+
 .result-left_card p {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 125%;
-        color: #27252D;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 125%;
+    color: #27252D;
 }
 
 
@@ -1139,24 +1075,26 @@ html {
     border-radius: 20px;
     margin-top: 16px;
 }
+
 .result-left_world h3 {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 18px;
-        line-height: 115%;
-        letter-spacing: -0.02em;
-        text-transform: uppercase;
-        color: #27252D;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 115%;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #27252D;
 }
+
 .result-left_world p {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 125%;
-        letter-spacing: 1px;
-        color: #27252D;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 125%;
+    letter-spacing: 1px;
+    color: #27252D;
 }
 
 .result-right {
@@ -1169,6 +1107,7 @@ html {
     overflow: hidden;
     border-radius: 20px;
 }
+
 .result-right img {
     width: 100%;
     height: 100%;
@@ -1178,6 +1117,7 @@ html {
     border-radius: 20px;
 
 }
+
 .result-right_text {
     display: flex;
     flex-direction: column;
@@ -1191,89 +1131,110 @@ html {
     left: 0;
     z-index: 2;
 }
+
 .result-right_text h3 {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 18px;
-        line-height: 115%;
-        letter-spacing: -0.02em;
-        text-transform: uppercase;
-        color: #F8F5F2;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 115%;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #F8F5F2;
 }
+
 .result-right_text p {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 125%;
-        font-variant: small-caps;
-        letter-spacing: 1px;
-        color: #F8F5F2;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 125%;
+    font-variant: small-caps;
+    letter-spacing: 1px;
+    color: #F8F5F2;
 }
+
 .sertificat {
-        display: flex;
-        width: min(1244px, 100%);
-        margin: 90px auto 0;
-        margin-top: 92px;
-        border-radius: 40px;
-        padding: 40px 41px;
-        background: url('./images/resultbg.png');
-        background-size: cover;
-        background-position: center;
-        background-color: rgba(203, 219, 232, 0.3);
+    display: flex;
+    width: min(1244px, 100%);
+    margin: 90px auto 0;
+    margin-top: 92px;
+    border-radius: 40px;
+    padding: 40px 41px;
+    background: url('./images/resultbg.png');
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(203, 219, 232, 0.3);
 }
+
 .sertificat-text {
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-        flex-direction: column;
-        align-items: flex-end;
-        padding: 0px 16px;
-        gap: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 0px 16px;
+    gap: 14px;
 }
 
 .sertificat-text_title {
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        padding: 16px 24px;
-        gap: 10px;
-        border: 1px solid #D689A3;
-        border-radius: 50px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 24px;
+    gap: 10px;
+    border: 1px solid #D689A3;
+    border-radius: 50px;
 }
+
 .sertificat-text h3 {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 24px;
-        line-height: 125%;
-        text-align: right;
-        letter-spacing: -0.02em;
-        text-transform: uppercase;
-        color: #27252D;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 125%;
+    text-align: right;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #27252D;
 }
+
 .sertificat-text p {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 500;
-        font-size: 18px;
-        line-height: 125%;
-        text-align: right;
-        letter-spacing: 1px;
-        text-indent: 81px;
-        font-variant: small-caps;
-        color: #151419;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 125%;
+    text-align: right;
+    letter-spacing: 1px;
+    text-indent: 81px;
+    font-variant: small-caps;
+    color: #151419;
 }
+
 .sertificat-design {
-        margin-left: 12px;
-        margin-right: 12px;
+    margin-left: 12px;
+    margin-right: 12px;
 }
+
 .sertificat-web {
     margin-top: 83px;
 }
+
+.sertificat-design img,
+.sertificat-web img {
+    display: block;
+    transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+
+.sertificat-design img:hover,
+.sertificat-web img:hover {
+    transform: scale(1.03) rotate(-1deg);
+    box-shadow: 0 12px 32px rgba(21, 15, 37, 0.18);
+}
+
 .real {
     display: flex;
     flex-direction: column;
@@ -1287,6 +1248,7 @@ html {
     background-position: center;
     background-color: rgba(203, 219, 232, 0.3);
 }
+
 .real-title {
     display: flex;
     flex-direction: column;
@@ -1294,6 +1256,7 @@ html {
     gap: 16px;
     margin-left: 445px;
 }
+
 .real-title h2 {
     font-family: 'Raleway';
     font-style: normal;
@@ -1304,6 +1267,7 @@ html {
     text-transform: uppercase;
     color: #150F25;
 }
+
 .real-title span {
     font-family: 'Raleway';
     font-style: normal;
@@ -1314,6 +1278,7 @@ html {
     text-transform: uppercase;
     color: #D689A3;
 }
+
 .real-title p {
     font-family: 'Raleway';
     font-style: normal;
@@ -1330,11 +1295,13 @@ html {
     margin-top: 42px;
     gap: 24px;
 }
+
 .real-cards {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px;
 }
+
 .real-cards h3 {
     font-family: 'Raleway';
     font-style: normal;
@@ -1346,6 +1313,7 @@ html {
     color: #27252D;
     margin-bottom: 4px;
 }
+
 .real-cards span {
     font-family: 'Raleway';
     font-style: normal;
@@ -1356,6 +1324,7 @@ html {
     color: #D689A3;
     margin-bottom: 16px;
 }
+
 .real-cards p {
     font-family: 'Raleway';
     font-style: normal;
@@ -1366,6 +1335,7 @@ html {
     color: #27252D;
 
 }
+
 .real-cards div {
     display: flex;
     flex-direction: column;
@@ -1375,11 +1345,14 @@ html {
     background: #E9F5FF;
     border-radius: 20px;
 }
+
 .real-card_consult {
     display: flex;
     flex-direction: column;
-    padding: 30px;
+    padding: 30px 30px 0 30px;
+    background: #E9F5FF;
 }
+
 .real-card_consult h3 {
     font-family: 'Raleway';
     font-style: normal;
@@ -1390,6 +1363,7 @@ html {
     text-transform: uppercase;
     color: #27252D;
 }
+
 .real-card_consult span {
     font-family: 'Raleway';
     font-style: normal;
@@ -1400,7 +1374,8 @@ html {
     color: #D689A3;
     margin-bottom: 227px;
 }
-.real-card_consult p{
+
+.real-card_consult p {
     font-family: 'Raleway';
     font-style: normal;
     font-weight: 400;
@@ -1409,6 +1384,7 @@ html {
     font-variant: small-caps;
     color: #27252D;
 }
+
 .real-button {
     display: flex;
     justify-content: center;
@@ -1440,9 +1416,7 @@ html {
     text-decoration: underline;
     color: #F8F5F2;
 }
-/* ================================================
-   ФУТЕР
-================================================ */
+
 .footer {
     display: flex;
     justify-content: space-between;
@@ -1450,6 +1424,7 @@ html {
     border-radius: 50px 50px 0px 0px;
     margin-top: 92px;
 }
+
 .footer-logo {
     margin-top: 36px;
     margin-right: 100px;
@@ -1487,5 +1462,1242 @@ html {
     margin-top: 179px;
     margin-left: 85px;
     margin-bottom: 13px;
+}
+
+
+/* ============================================================
+   АДАПТИВНІСТЬ — усі екрани
+   ============================================================ */
+
+/* ---------- 1024px — планшет landscape ---------- */
+@media (max-width: 1024px) {
+
+    /* --- Меню --- */
+    .page-menu-trigger {
+        right: 20px;
+        top: 20px;
+    }
+
+    .burger-menu-wrapper {
+        width: 280px;
+    }
+
+    .burger-menu-wrapper.is-open {
+        right: 20px;
+    }
+
+    /* --- Hero секція --- */
+    .page {
+        margin: 40px 16px 0;
+        width: auto;
+        position: relative;
+        min-height: 600px;
+        overflow: hidden;
+    }
+
+    /* Правий блок — фон, розтягується на весь розмір */
+    .page-right {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        border-radius: 40px;
+    }
+
+    .page-right::after {
+        left: 0;
+        width: 100%;
+        border-radius: 40px;
+    }
+
+    /* Лівий блок — накладається поверх правого */
+    .page-left {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        background-color: rgba(245, 251, 255, 0.75);
+        backdrop-filter: blur(2px);
+        padding: 32px;
+    }
+
+    .page-title h1 {
+        font-size: clamp(64px, 10vw, 160px);
+        line-height: 1;
+    }
+
+    .page-subtitle {
+        font-size: clamp(40px, 7vw, 88px);
+        line-height: 1;
+    }
+
+    .page-button {
+        margin-left: 0;
+        margin-top: 40px;
+        width: 100%;
+        max-width: 320px;
+    }
+
+    /* --- Portfolio --- */
+    .portfolio {
+        margin: 60px 16px 0;
+        width: auto;
+    }
+
+    .portfolio-title {
+        padding: 40px 32px 28px 32px;
+    }
+
+    .portfolio-title h2 {
+        font-size: clamp(48px, 8vw, 88px);
+    }
+
+    .portfolio-subtitle {
+        margin-left: 0;
+    }
+
+    .portfolio-landingpage {
+        flex-direction: column;
+        padding: 0 32px 32px;
+    }
+
+    .portfolio-landingpage_img img {
+        width: 100%;
+        height: auto;
+    }
+
+    .portfolio-landingpage_title {
+        margin-bottom: 24px;
+    }
+
+    .portfolio-button {
+        margin-left: 0;
+    }
+
+    .portfolio-projects {
+        flex-wrap: wrap;
+        padding: 24px 32px;
+        gap: 24px;
+    }
+
+    .portfolio-projects_left,
+    .portfolio-projects_center,
+    .portfolio-projects_right {
+        flex: 1 1 calc(50% - 12px);
+        min-width: 240px;
+    }
+
+    .portfolio-projects_left img,
+    .portfolio-projects_center img,
+    .portfolio-projects_right img {
+        width: 100%;
+        height: auto;
+    }
+
+    .portfolio-projects_button {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .portfolio-vertical-labels {
+        display: none;
+    }
+
+    /* --- Sistem --- */
+    .sistem {
+        margin: 60px 16px 0;
+        width: auto;
+    }
+
+    .sistem-title {
+        width: 100%;
+        padding: 0 32px;
+    }
+
+    .sistem-title h2 {
+        font-size: clamp(48px, 8vw, 88px);
+    }
+
+    .sistem-blok {
+        flex-direction: column;
+        width: auto;
+        margin: 40px 16px 0;
+    }
+
+    .sistem-blok_text {
+        align-self: flex-start;
+        margin: 32px 32px 0 32px;
+    }
+
+    .sistem-steps {
+        padding: 40px 32px;
+    }
+
+    .sistem-vertical-labels {
+        display: none;
+    }
+
+    /* --- Result --- */
+    .result {
+        flex-direction: column;
+        margin: 60px 16px 0;
+        width: auto;
+    }
+
+    .result-left {
+        margin: 40px 32px;
+    }
+
+    .result-left_title h2 {
+        font-size: clamp(48px, 8vw, 88px);
+    }
+
+    .result-left_card {
+        flex-direction: column;
+    }
+
+    .result-right {
+        width: calc(100% - 64px);
+        height: 300px;
+        margin: 0 32px 40px;
+    }
+
+    /* --- Sertificat --- */
+    .sertificat {
+        flex-wrap: wrap;
+        margin: 60px 16px 0;
+        width: auto;
+        gap: 24px;
+    }
+
+    .sertificat-design,
+    .sertificat-web {
+        flex: 1 1 calc(50% - 24px);
+    }
+
+    .sertificat-design img,
+    .sertificat-web img {
+        width: 100%;
+        height: auto;
+    }
+
+    .sertificat-web {
+        margin-top: 0;
+    }
+
+    /* --- Real --- */
+    .real {
+        margin: 60px 16px 0;
+        width: auto;
+    }
+
+    .real-title {
+        margin-left: 0;
+        align-items: flex-start;
+    }
+
+    .real-title h2 {
+        font-size: clamp(48px, 8vw, 88px);
+        text-align: left;
+    }
+
+    .real-title p,
+    .real-title span {
+        text-align: left;
+    }
+
+    .real-card {
+        flex-direction: column;
+    }
+
+    .real-cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .real-cards div {
+        width: 100%;
+    }
+
+    .real-card_consult {
+        border-radius: 20px;
+    }
+
+    .real-card_consult span {
+        margin-bottom: 24px;
+    }
+
+    /* --- Footer --- */
+    .footer {
+        flex-wrap: wrap;
+        padding: 40px 32px 32px;
+        gap: 24px;
+    }
+
+    .footer-logo {
+        margin: 0;
+    }
+
+    .footer-nav {
+        margin: 0;
+    }
+
+    .footer-copy {
+        margin: 0;
+        width: 100%;
+    }
+}
+
+/* ---------- 768px — планшет portrait ---------- */
+@media (max-width: 768px) {
+
+    /* --- Hero --- */
+    .page {
+        min-height: 500px;
+        margin: 24px 12px 0;
+    }
+
+    .page-left {
+        padding: 24px;
+    }
+
+    .page-title h1 {
+        font-size: clamp(48px, 12vw, 100px);
+    }
+
+    .page-subtitle {
+        font-size: clamp(32px, 9vw, 70px);
+    }
+
+    .page-title p {
+        font-size: 18px;
+    }
+
+    .page-info {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .page-info_left,
+    .page-info_right {
+        width: 100%;
+        text-align: left;
+    }
+
+    /* --- Бургер меню --- */
+    .burger-menu-wrapper {
+        width: calc(100vw - 40px);
+        top: 80px;
+        right: -100vw;
+    }
+
+    .burger-menu-wrapper.is-open {
+        right: 20px;
+    }
+
+    .burger-menu-wrapper.is-open.scrolled-pos {
+        right: 20px;
+    }
+
+    .burger-logo {
+        margin-left: 0;
+        width: 100px;
+    }
+
+    /* --- Portfolio --- */
+    .portfolio {
+        margin: 40px 12px 0;
+    }
+
+    .portfolio-title {
+        padding: 32px 24px 20px;
+    }
+
+    .portfolio-title h2 {
+        font-size: clamp(36px, 10vw, 72px);
+    }
+
+    .portfolio-title p,
+    .portfolio-title span {
+        font-size: 18px;
+    }
+
+    .portfolio-landingpage {
+        padding: 0 24px 24px;
+    }
+
+    .portfolio-projects {
+        padding: 24px;
+        gap: 16px;
+    }
+
+    .portfolio-projects_left,
+    .portfolio-projects_center,
+    .portfolio-projects_right {
+        flex: 1 1 100%;
+    }
+
+    .portfolio-projects_button {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    /* --- Sistem --- */
+    .sistem {
+        margin: 40px 12px 0;
+    }
+
+    .sistem-title {
+        padding: 0 24px;
+    }
+
+    .sistem-title h2 {
+        font-size: clamp(36px, 10vw, 72px);
+    }
+
+    .sistem-title p {
+        font-size: 18px;
+    }
+
+    .sistem-blok {
+        margin: 32px 12px 0;
+    }
+
+    .sistem-steps {
+        padding: 32px 24px;
+    }
+
+    .steps__number {
+        font-size: clamp(36px, 8vw, 68px);
+    }
+
+    /* --- Result --- */
+    .result {
+        margin: 40px 12px 0;
+    }
+
+    .result-left {
+        margin: 32px 24px;
+    }
+
+    .result-left_title h2 {
+        font-size: clamp(36px, 10vw, 72px);
+    }
+
+    .result-left_title p {
+        font-size: 18px;
+    }
+
+    .result-right {
+        width: calc(100% - 48px);
+        margin: 0 24px 32px;
+        height: 260px;
+    }
+
+    /* --- Sertificat --- */
+    .sertificat {
+        flex-direction: column;
+        margin: 40px 12px 0;
+        padding: 32px 24px;
+    }
+
+    .sertificat-design,
+    .sertificat-web {
+        flex: 1 1 100%;
+    }
+
+    .sertificat-text p {
+        text-indent: 0;
+        font-size: 16px;
+    }
+
+    .sertificat-text h3 {
+        font-size: 20px;
+    }
+
+    /* --- Real --- */
+    .real {
+        margin: 40px 12px 0;
+        padding: 32px 24px;
+    }
+
+    .real-title h2 {
+        font-size: clamp(36px, 10vw, 72px);
+    }
+
+    .real-title p {
+        font-size: 18px;
+    }
+
+    .real-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .real-button {
+        width: 100%;
+    }
+
+    /* --- Footer --- */
+    .footer {
+        flex-direction: column;
+        padding: 32px 24px 24px;
+        border-radius: 30px 30px 0 0;
+    }
+
+    .footer-nav {
+        margin: 0;
+    }
+
+    .footer-copy {
+        margin: 0;
+        order: 3;
+    }
+}
+
+/* ---------- 480px — великий телефон ---------- */
+@media (max-width: 480px) {
+
+    /* --- Меню --- */
+    .page-menu-trigger {
+        top: 16px;
+        right: 16px;
+        padding: 8px 12px;
+    }
+
+    /* --- Hero --- */
+    .page {
+        margin: 16px 8px 0;
+        border-radius: 24px;
+        min-height: 420px;
+    }
+
+    .page-left {
+        padding: 20px;
+        border-radius: 24px;
+        background-color: rgba(245, 251, 255, 0.8);
+    }
+
+    .page-title h1 {
+        font-size: clamp(38px, 13vw, 72px);
+    }
+
+    .page-subtitle {
+        font-size: clamp(26px, 10vw, 52px);
+    }
+
+    .page-title p {
+        font-size: 16px;
+    }
+
+    .page-badge p {
+        font-size: 12px;
+    }
+
+    .site-logo {
+        width: 100px;
+    }
+
+    .page-button {
+        margin-top: 24px;
+        max-width: 100%;
+    }
+
+    .page-info {
+        margin-top: 20px;
+    }
+
+    .page-info p {
+        font-size: 14px;
+    }
+
+    /* --- Portfolio --- */
+    .portfolio {
+        margin: 32px 8px 0;
+        border-radius: 24px;
+    }
+
+    .portfolio-title {
+        padding: 24px 20px 16px;
+    }
+
+    .portfolio-title h2 {
+        font-size: clamp(30px, 12vw, 56px);
+    }
+
+    .portfolio-title p,
+    .portfolio-title span {
+        font-size: 16px;
+    }
+
+    .portfolio-landingpage {
+        padding: 0 20px 20px;
+    }
+
+    .portfolio-landingpage_info {
+        padding: 20px;
+    }
+
+    .portfolio-page_span span {
+        font-size: 16px;
+    }
+
+    .portfolio-projects {
+        padding: 16px 20px;
+        gap: 12px;
+    }
+
+    .portfolio-projects_button {
+        margin-bottom: 32px;
+    }
+
+    /* --- Sistem --- */
+    .sistem {
+        margin: 32px 8px 0;
+    }
+
+    .sistem-title {
+        padding: 0 20px;
+    }
+
+    .sistem-title h2 {
+        font-size: clamp(30px, 12vw, 56px);
+    }
+
+    .sistem-blok {
+        margin: 24px 8px 0;
+        border-radius: 24px;
+    }
+
+    .sistem-blok_text {
+        margin: 24px 20px 0 20px;
+        width: auto;
+    }
+
+    .sistem-steps {
+        padding: 24px 20px;
+    }
+
+    .sistem-steps__item {
+        padding: 16px;
+    }
+
+    .steps__number {
+        font-size: clamp(28px, 10vw, 52px);
+    }
+
+    .steps__text h4 {
+        font-size: 16px;
+    }
+
+    .steps__text p {
+        font-size: 14px;
+    }
+
+    /* --- Result --- */
+    .result {
+        margin: 32px 8px 0;
+        border-radius: 24px;
+    }
+
+    .result-left {
+        margin: 24px 20px;
+    }
+
+    .result-left_title h2 {
+        font-size: clamp(30px, 12vw, 56px);
+    }
+
+    .result-left_title p {
+        font-size: 16px;
+    }
+
+    .result-left_card {
+        margin-top: 32px;
+    }
+
+    .result-left_card-goit,
+    .result-left_card-design {
+        padding: 20px;
+    }
+
+    .result-right {
+        width: calc(100% - 40px);
+        margin: 0 20px 24px;
+        height: 220px;
+    }
+
+    /* --- Sertificat --- */
+    .sertificat {
+        margin: 32px 8px 0;
+        border-radius: 24px;
+        padding: 24px 20px;
+    }
+
+    .sertificat-text_title {
+        padding: 12px 16px;
+    }
+
+    .sertificat-text h3 {
+        font-size: 16px;
+    }
+
+    .sertificat-text p {
+        font-size: 14px;
+    }
+
+    /* --- Real --- */
+    .real {
+        margin: 32px 8px 0;
+        border-radius: 24px;
+        padding: 24px 20px;
+    }
+
+    .real-title h2 {
+        font-size: clamp(30px, 12vw, 56px);
+    }
+
+    .real-title p,
+    .real-title span {
+        font-size: 16px;
+    }
+
+    .real-cards div {
+        padding: 20px;
+    }
+
+    .real-card_consult {
+        padding: 20px;
+    }
+
+    .real-card_consult span {
+        margin-bottom: 16px;
+    }
+
+    .real-button {
+        margin-top: 16px;
+    }
+
+    /* --- Footer --- */
+    .footer {
+        padding: 24px 20px 20px;
+        border-radius: 20px 20px 0 0;
+        gap: 16px;
+    }
+
+    .footer-logo {
+        margin: 0;
+    }
+
+    .footer-copy {
+        font-size: 11px;
+    }
+}
+
+/* ---------- 380px — стандартний iPhone / малий Android ---------- */
+@media (max-width: 380px) {
+
+    /* --- Меню --- */
+    .page-menu-trigger {
+        top: 12px;
+        right: 12px;
+        padding: 6px 10px;
+        gap: 6px;
+    }
+
+    .page-menu-trigger p {
+        font-size: 14px;
+    }
+
+    .burger-menu-wrapper {
+        width: calc(100vw - 24px);
+        top: 60px;
+        right: -100vw;
+    }
+
+    .burger-menu-wrapper.is-open {
+        right: 12px;
+    }
+
+    .burger-menu-wrapper.is-open.scrolled-pos {
+        right: 12px;
+    }
+
+    .menu-item a {
+        font-size: 17px;
+    }
+
+    .menu-list {
+        gap: 20px;
+    }
+
+    /* --- Hero --- */
+    .page {
+        margin: 12px 6px 0;
+        border-radius: 20px;
+        min-height: 380px;
+    }
+
+    .page-left {
+        padding: 16px;
+        border-radius: 20px;
+    }
+
+    .page-badge {
+        padding: 4px 12px;
+    }
+
+    .page-badge p {
+        font-size: 11px;
+    }
+
+    .site-logo {
+        width: 80px;
+    }
+
+    .page-version {
+        font-size: 9px;
+    }
+
+    .page-title h1 {
+        font-size: clamp(32px, 14vw, 56px);
+    }
+
+    .page-subtitle {
+        font-size: clamp(22px, 11vw, 42px);
+    }
+
+    .page-title p {
+        font-size: 14px;
+    }
+
+    .page-button {
+        margin-top: 20px;
+    }
+
+    .page-button a {
+        font-size: 14px;
+        padding: 16px;
+    }
+
+    .page-info p {
+        font-size: 13px;
+    }
+
+    /* --- Portfolio --- */
+    .portfolio {
+        margin: 24px 6px 0;
+        border-radius: 20px;
+    }
+
+    .portfolio-title {
+        padding: 20px 16px 14px;
+    }
+
+    .portfolio-title h2 {
+        font-size: clamp(26px, 13vw, 48px);
+    }
+
+    .portfolio-title p,
+    .portfolio-title span {
+        font-size: 14px;
+    }
+
+    .portfolio-badge p {
+        font-size: 12px;
+    }
+
+    .portfolio-landingpage {
+        padding: 0 16px 16px;
+    }
+
+    .portfolio-landingpage_info {
+        padding: 16px;
+    }
+
+    .portfolio-page_span span {
+        font-size: 13px;
+    }
+
+    .portfolio-page_badge p {
+        font-size: 12px;
+    }
+
+    .portfolio-landingpage_title h3 {
+        font-size: 15px;
+    }
+
+    .portfolio-landingpage_title p {
+        font-size: 13px;
+    }
+
+    .portfolio-reviews {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .portfolio-projects {
+        padding: 12px 16px;
+        gap: 10px;
+    }
+
+    .portfolio-projects_button {
+        margin-bottom: 24px;
+    }
+
+    .portfolio__link {
+        font-size: 15px;
+    }
+
+    /* --- Sistem --- */
+    .sistem {
+        margin: 24px 6px 0;
+    }
+
+    .sistem-title {
+        padding: 0 16px;
+    }
+
+    .sistem-title h2 {
+        font-size: clamp(26px, 13vw, 48px);
+    }
+
+    .sistem-title p {
+        font-size: 14px;
+    }
+
+    .sistem-blok {
+        margin: 20px 6px 0;
+        border-radius: 20px;
+    }
+
+    .sistem-blok_text {
+        margin: 20px 16px 0;
+        width: auto;
+    }
+
+    .sistem-steps {
+        padding: 20px 16px;
+        gap: 4px;
+    }
+
+    .sistem-steps__item {
+        padding: 12px;
+    }
+
+    .steps__number {
+        font-size: clamp(24px, 10vw, 44px);
+    }
+
+    .steps__text h4 {
+        font-size: 14px;
+    }
+
+    .steps__text p {
+        font-size: 13px;
+    }
+
+    /* --- Result --- */
+    .result {
+        margin: 24px 6px 0;
+        border-radius: 20px;
+    }
+
+    .result-left {
+        margin: 20px 16px;
+    }
+
+    .result-left_title h2 {
+        font-size: clamp(26px, 13vw, 48px);
+    }
+
+    .result-left_title p {
+        font-size: 14px;
+    }
+
+    .result-left_card {
+        margin-top: 24px;
+    }
+
+    .result-left_card-goit,
+    .result-left_card-design {
+        padding: 16px;
+    }
+
+    .result-left_card h3,
+    .result-left_world h3 {
+        font-size: 15px;
+    }
+
+    .result-left_card p,
+    .result-left_world p {
+        font-size: 13px;
+    }
+
+    .result-left_world {
+        padding: 16px;
+        margin-top: 10px;
+    }
+
+    .result-right {
+        width: calc(100% - 32px);
+        margin: 0 16px 20px;
+        height: 180px;
+    }
+
+    .result-right_text {
+        padding: 16px;
+    }
+
+    .result-right_text h3 {
+        font-size: 15px;
+    }
+
+    .result-right_text p {
+        font-size: 13px;
+    }
+
+    /* --- Sertificat --- */
+    .sertificat {
+        margin: 24px 6px 0;
+        border-radius: 20px;
+        padding: 20px 16px;
+        gap: 16px;
+    }
+
+    .sertificat-text_title {
+        padding: 10px 14px;
+    }
+
+    .sertificat-text h3 {
+        font-size: 14px;
+    }
+
+    .sertificat-text p {
+        font-size: 13px;
+    }
+
+    /* --- Real --- */
+    .real {
+        margin: 24px 6px 0;
+        border-radius: 20px;
+        padding: 20px 16px;
+    }
+
+    .real-title h2 {
+        font-size: clamp(26px, 13vw, 48px);
+    }
+
+    .real-title p,
+    .real-title span {
+        font-size: 14px;
+    }
+
+    .real-cards div {
+        padding: 16px;
+    }
+
+    .real-cards h3,
+    .real-card_consult h3 {
+        font-size: 15px;
+    }
+
+    .real-cards span,
+    .real-card_consult span {
+        font-size: 14px;
+    }
+
+    .real-cards p,
+    .real-card_consult p {
+        font-size: 13px;
+    }
+
+    .real-card_consult {
+        padding: 16px;
+    }
+
+    .real-card_consult span {
+        margin-bottom: 12px;
+    }
+
+    .real-button a {
+        font-size: 14px;
+        padding: 14px;
+    }
+
+    /* --- Footer --- */
+    .footer {
+        padding: 20px 16px 16px;
+        border-radius: 16px 16px 0 0;
+        gap: 12px;
+    }
+
+    .footer-copy {
+        font-size: 10px;
+    }
+
+    .footer-link {
+        font-size: 13px;
+    }
+}
+
+/* ============================================================
+   АНІМАЦІЇ — hover-ефекти на картках
+   ============================================================ */
+
+/* --- Portfolio landingpage info --- */
+.portfolio-landingpage_info {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.portfolio-landingpage_info:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(21, 15, 37, 0.12);
+}
+
+/* --- Portfolio projects cards --- */
+.portfolio-projects_left,
+.portfolio-projects_center,
+.portfolio-projects_right {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.portfolio-projects_left:hover,
+.portfolio-projects_center:hover,
+.portfolio-projects_right:hover {
+    transform: translateY(-6px);
+}
+
+/* --- Sistem steps items --- */
+.sistem-steps__item {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        background 0.2s ease,
+        box-shadow 0.3s ease;
+}
+
+.sistem-steps__item:hover {
+    transform: translateX(6px);
+    background: rgba(214, 137, 163, 0.08);
+    box-shadow: 0 4px 16px rgba(21, 15, 37, 0.08);
+}
+
+/* --- Result cards --- */
+.result-left_card-goit,
+.result-left_card-design {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.result-left_card-goit:hover,
+.result-left_card-design:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(21, 15, 37, 0.1);
+}
+
+.result-left_world {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.result-left_world:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(21, 15, 37, 0.1);
+}
+
+.result-right_text {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.result-right:hover .result-right_text {
+    transform: translateY(-4px);
+}
+
+/* --- Sertificat cards (уже є scale, додаємо тінь) --- */
+.sertificat-design,
+.sertificat-web {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sertificat-design:hover,
+.sertificat-web:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(21, 15, 37, 0.14);
+}
+
+/* --- Real cards --- */
+.real-cards div {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.real-cards div:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(21, 15, 37, 0.1);
+}
+
+.real-card_consult {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 20px;
+}
+
+.real-card_consult:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(21, 15, 37, 0.1);
+}
+
+/* --- Кнопки --- */
+.button__link,
+.portfolio__link,
+.real-button a {
+    transition: letter-spacing 0.25s ease, opacity 0.25s ease;
+}
+
+.page-button:hover .button__link,
+.real-button:hover a {
+    letter-spacing: 0.03em;
+}
+
+/* --- Menu trigger --- */
+.page-menu-trigger {
+    transition:
+        right 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+        top 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.35s ease,
+        background 0.25s ease,
+        box-shadow 0.3s ease;
+}
+
+.page-menu-trigger:hover {
+    box-shadow: 0 4px 16px rgba(21, 15, 37, 0.12);
+}
+
+/* ============================================================
+   FOOTER — адаптив по центру
+   ============================================================ */
+@media (max-width: 1024px) {
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-logo {
+        margin: 0;
+        order: 1;
+    }
+
+    .footer-nav {
+        margin: 0;
+        order: 2;
+        justify-content: center;
+    }
+
+    .footer-copy {
+        margin: 0;
+        order: 3;
+        text-align: center;
+    }
 }
 

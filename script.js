@@ -1,12 +1,4 @@
-// ================================================
-// script.js — бургер-меню + скрол-поведінка
-// ================================================
-
 document.addEventListener('DOMContentLoaded', () => {
-
-  // ------------------------------------------------
-  // 1. ЕЛЕМЕНТИ DOM
-  // ------------------------------------------------
   const trigger     = document.querySelector('.page-menu-trigger');
   const closeBtn    = document.querySelector('.burger-close-btn');
   const menuWrapper = document.querySelector('.burger-menu-wrapper');
@@ -18,53 +10,53 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // ------------------------------------------------
-  // 2. СТАН
-  // ------------------------------------------------
   let isOpen     = false;
-  let isScrolled = false; // чи тригер зараз у scrolled-позиції
+  let isScrolled = false;
+  let savedScrollY = 0;
 
-  // ------------------------------------------------
-  // 3. ВІДКРИТТЯ
-  // ------------------------------------------------
+  /* ---- iOS scroll-lock ---- */
+  function lockScroll() {
+    savedScrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top      = `-${savedScrollY}px`;
+    document.body.style.left     = '0';
+    document.body.style.right    = '0';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function unlockScroll() {
+    // Спочатку знімаємо фікс — без scrollTo щоб не було стрибка
+    document.body.style.position = '';
+    document.body.style.top      = '';
+    document.body.style.left     = '';
+    document.body.style.right    = '';
+    document.body.style.overflow = '';
+    // Потім відновлюємо позицію синхронно
+    window.scrollTo({ top: savedScrollY, behavior: 'instant' });
+  }
+
+  /* ---- Open / Close ---- */
   function openMenu() {
     isOpen = true;
     menuWrapper.classList.add('is-open');
-
-    // Якщо тригер зміщений до правого краю —
-    // меню теж відкривається у правому краї
-    if (isScrolled) {
-      menuWrapper.classList.add('scrolled-pos');
-    } else {
-      menuWrapper.classList.remove('scrolled-pos');
-    }
-
+    menuWrapper.classList.toggle('scrolled-pos', isScrolled);
     overlay.classList.add('is-visible');
-    document.body.style.overflow = 'hidden';
+    lockScroll();
     trigger.setAttribute('aria-expanded', 'true');
-
-    // Піднімаємо тригер над оверлеєм (z-index 900)
     trigger.style.zIndex = '1100';
     closeBtn.focus();
   }
 
-  // ------------------------------------------------
-  // 4. ЗАКРИТТЯ
-  // ------------------------------------------------
   function closeMenu() {
     isOpen = false;
-    menuWrapper.classList.remove('is-open');
-    menuWrapper.classList.remove('scrolled-pos');
+    menuWrapper.classList.remove('is-open', 'scrolled-pos');
     overlay.classList.remove('is-visible');
-    document.body.style.overflow = '';
+    unlockScroll();
     trigger.setAttribute('aria-expanded', 'false');
     trigger.style.zIndex = '';
     trigger.focus();
   }
 
-  // ------------------------------------------------
-  // 5. ОБРОБНИКИ ПОДІЙ
-  // ------------------------------------------------
   trigger.addEventListener('click', () => {
     isOpen ? closeMenu() : openMenu();
   });
@@ -77,47 +69,27 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   menuLinks.forEach((link) => {
-    link.addEventListener('click', closeMenu);
+    link.addEventListener('click', () => {
+      closeMenu();
+    });
   });
 
-  // ------------------------------------------------
-  // 6. СКРОЛ-ПОВЕДІНКА
-  //
-  // При scrollY > SCROLL_THRESHOLD:
-  //   — додає .is-scrolled на тригер
-  //   — CSS анімує right: 200px → 20px (до правого краю)
-  //   — CSS анімує top: 100px → 50vh (центр по вертикалі)
-  //   — текст «Меню» плавно зникає через max-width + opacity
-  //
-  // DOM оновлюється лише при зміні стану — не кожен кадр.
-  // { passive: true } — браузер оптимізує обробку скролу.
-  // ------------------------------------------------
+  /* ---- Scroll handler ---- */
   const SCROLL_THRESHOLD = 60;
   let wasScrolled = false;
 
   function handleScroll() {
     const scrolled = window.scrollY > SCROLL_THRESHOLD;
-
     if (scrolled !== wasScrolled) {
       isScrolled = scrolled;
       trigger.classList.toggle('is-scrolled', scrolled);
       wasScrolled = scrolled;
-
-      // Якщо меню відкрите і стан змінився —
-      // синхронізуємо позицію панелі меню
       if (isOpen) {
-        if (scrolled) {
-          menuWrapper.classList.add('scrolled-pos');
-        } else {
-          menuWrapper.classList.remove('scrolled-pos');
-        }
+        menuWrapper.classList.toggle('scrolled-pos', scrolled);
       }
     }
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true });
-
-  // Перевірка одразу при завантаженні
   handleScroll();
-
 });
